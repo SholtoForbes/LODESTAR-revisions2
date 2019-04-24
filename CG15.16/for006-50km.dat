@@ -1,0 +1,433 @@
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS     
+
+    CONERR - INPUT ERROR CHECKING
+
+    ERROR CODES - N* DENOTES THE NUMBER OF OCCURENCES OF EACH ERROR
+    A - UNKNOWN VARIABLE NAME
+    B - MISSING EQUAL SIGN FOLLOWING VARIABLE NAME
+    C - NON-ARRAY VARIABLE HAS AN ARRAY ELEMENTDESIGNATION - (N)
+    D - NON-ARRAY VARIABLE HAS MULTIPLE VALUES ASSIGNED
+    E - ASSIGNED VALUES EXCEED ARRAY DIMENSION
+    F - SYNTAX ERROR
+
+    ************************* INPUT DATA CARDS *************************
+
+   1 CASEID SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                                   
+   2 DIM M                                                                           
+   3 DERIV DEG                                                                       
+   4 NO LAT                                                                          
+   5 PLOT                                                                            
+   6 HYPER                                                                           
+   7  $FLTCON NALPHA=11.,                                                            
+   8          ALPHA=0.,2.,4.,6.,8.,10.,12.,14.,16.,18.,20.,                          
+   9          NMACH=5.,                                                              
+  10          MACH=9.,11.,13.,15.,17.,                                               
+  11          ALT=50000.,50000.,50000.,50000.,50000.,                                
+  12  $END                                                                           
+  13  $REFQ XCG=0.,                                                                  
+  14        ZCG=0.,                                                                  
+  15        BLAYER=NATURAL,                                                          
+               ** SUBSTITUTING NUMERIC FOR NAME NATURAL
+  16  $END                                                                           
+  17  $AXIBOD TNOSE=CONE,                                                            
+               ** SUBSTITUTING NUMERIC FOR NAME CONE
+  18          LNOSE=3.,                                                              
+  19          DNOSE=1.1,                                                             
+  20          BNOSE=0.05,                                                            
+  21          TRUNC=.FALSE.,                                                         
+  22          LCENTR=4.5,                                                            
+  23          DCENTR=1.1,                                                            
+  24          LAFT=1.5,                                                              
+  25          DAFT=1.1,                                                              
+  26  $END                                                                           
+  27 SAVE                                                                            
+  28 NEXT CASE                                                                       
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   1
+    CASE INPUTS
+    FOLLOWING ARE THE CARDS INPUT FOR THIS CASE
+
+ CASEID SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                                   
+ DIM M                                                                           
+ DERIV DEG                                                                       
+ NO LAT                                                                          
+ PLOT                                                                            
+ HYPER                                                                           
+  $FLTCON NALPHA=11.,                                                            
+          ALPHA=0.,2.,4.,6.,8.,10.,12.,14.,16.,18.,20.,                          
+          NMACH=5.,                                                              
+          MACH=9.,11.,13.,15.,17.,                                               
+          ALT=50000.,50000.,50000.,50000.,50000.,                                
+  $END                                                                           
+  $REFQ XCG=0.,                                                                  
+        ZCG=0.,                                                                  
+        BLAYER=1.,                                                               
+  $END                                                                           
+  $AXIBOD TNOSE=0.,                                                              
+          LNOSE=3.,                                                              
+          DNOSE=1.1,                                                             
+          BNOSE=0.05,                                                            
+          TRUNC=.FALSE.,                                                         
+          LCENTR=4.5,                                                            
+          DCENTR=1.1,                                                            
+          LAFT=1.5,                                                              
+          DAFT=1.1,                                                              
+  $END                                                                           
+ SAVE                                                                            
+ NEXT CASE                                                                       
+    * WARNING * THE REFERENCE AREA IS UNSPECIFIED, DEFAULT VALUE ASSUMED
+    * WARNING * THE REFERENCE LENGTH IS UNSPECIFIED, DEFAULT VALUE ASSUMED
+    THE BOUNDARY LAYER IS ASSUMED TO DEVELOP NATURALLY
+    THE INPUT UNITS ARE IN METERS, THE SCALE FACTOR IS   1.0000
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   2
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =       9.00                REYNOLDS NO = 1.783E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   4529.97 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ----- LONGITUDINAL -----     -- LATERAL DIRECTIONAL --
+         ALPHA       CN        CM        CA        CY       CLN       CLL
+
+          0.00     0.000     0.000     0.077    -0.000     0.000     0.000
+          2.00     0.080    -0.196     0.076    -0.000     0.000     0.000
+          4.00     0.198    -0.572     0.076    -0.000     0.000     0.000
+          6.00     0.333    -1.028     0.076    -0.000     0.000     0.000
+          8.00     0.480    -1.544     0.076    -0.000     0.000     0.000
+         10.00     0.648    -2.158     0.075    -0.000     0.000     0.000
+         12.00     0.846    -2.924     0.075    -0.000     0.000     0.000
+         14.00     1.067    -3.799     0.074    -0.000     0.000     0.000
+         16.00     1.308    -4.776     0.074    -0.000     0.000     0.000
+         18.00     1.568    -5.848     0.073    -0.000     0.000     0.000
+         20.00     1.846    -7.012     0.072    -0.000     0.000     0.000
+
+         ALPHA       CL        CD      CL/CD     X-C.P.
+
+          0.00     0.000     0.077     0.000    -1.757
+          2.00     0.077     0.079     0.975    -2.452
+          4.00     0.192     0.090     2.137    -2.885
+          6.00     0.323     0.111     2.926    -3.085
+          8.00     0.465     0.142     3.277    -3.214
+         10.00     0.625     0.187     3.345    -3.332
+         12.00     0.812     0.249     3.259    -3.454
+         14.00     1.018     0.330     3.080    -3.560
+         16.00     1.237     0.432     2.867    -3.650
+         18.00     1.469     0.554     2.651    -3.729
+         20.00     1.710     0.699     2.446    -3.798
+
+    X-C.P. MEAS. FROM MOMENT CENTER IN REF. LENGTHS, NEG. AFT OF MOMENT CENTER
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   3
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =       9.00                REYNOLDS NO = 1.783E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   4529.97 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ---------- DERIVATIVES (PER DEGREE) ----------
+         ALPHA       CNA         CMA         CYB         CLNB        CLLB
+          0.00      0.0305     -0.0535
+          2.00      0.0495     -0.1426
+          4.00      0.0633     -0.2079
+          6.00      0.0706     -0.2430
+          8.00      0.0786     -0.2824
+         10.00      0.0915     -0.3445
+         12.00      0.1049     -0.4100
+         14.00      0.1155     -0.4627
+         16.00      0.1253     -0.5120
+         18.00      0.1345     -0.5588
+         20.00      0.1433     -0.6047
+
+    BODY ALONE LINEAR DATA GENERATED FROM MODIFIED NEWTONIAN FLOW THEORY
+
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   4
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      11.00                REYNOLDS NO = 2.179E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   6767.00 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ----- LONGITUDINAL -----     -- LATERAL DIRECTIONAL --
+         ALPHA       CN        CM        CA        CY       CLN       CLL
+
+          0.00     0.000     0.000     0.073    -0.000     0.000     0.000
+          2.00     0.080    -0.196     0.073    -0.000     0.000     0.000
+          4.00     0.198    -0.572     0.073    -0.000     0.000     0.000
+          6.00     0.325    -0.990     0.072    -0.000     0.000     0.000
+          8.00     0.471    -1.499     0.072    -0.000     0.000     0.000
+         10.00     0.647    -2.155     0.072    -0.000     0.000     0.000
+         12.00     0.847    -2.925     0.071    -0.000     0.000     0.000
+         14.00     1.068    -3.801     0.071    -0.000     0.000     0.000
+         16.00     1.309    -4.777     0.070    -0.000     0.000     0.000
+         18.00     1.570    -5.850     0.070    -0.000     0.000     0.000
+         20.00     1.847    -7.014     0.069    -0.000     0.000     0.000
+
+         ALPHA       CL        CD      CL/CD     X-C.P.
+
+          0.00     0.000     0.073     0.000    -1.758
+          2.00     0.078     0.076     1.026    -2.451
+          4.00     0.193     0.086     2.234    -2.884
+          6.00     0.316     0.106     2.979    -3.044
+          8.00     0.456     0.137     3.331    -3.183
+         10.00     0.625     0.183     3.413    -3.329
+         12.00     0.814     0.246     3.308    -3.453
+         14.00     1.019     0.327     3.115    -3.558
+         16.00     1.239     0.428     2.892    -3.649
+         18.00     1.471     0.551     2.669    -3.727
+         20.00     1.712     0.697     2.458    -3.797
+
+    X-C.P. MEAS. FROM MOMENT CENTER IN REF. LENGTHS, NEG. AFT OF MOMENT CENTER
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   5
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      11.00                REYNOLDS NO = 2.179E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   6767.00 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ---------- DERIVATIVES (PER DEGREE) ----------
+         ALPHA       CNA         CMA         CYB         CLNB        CLLB
+          0.00      0.0305     -0.0536
+          2.00      0.0496     -0.1427
+          4.00      0.0613     -0.1984
+          6.00      0.0682     -0.2317
+          8.00      0.0805     -0.2908
+         10.00      0.0940     -0.3562
+         12.00      0.1052     -0.4113
+         14.00      0.1156     -0.4629
+         16.00      0.1253     -0.5122
+         18.00      0.1345     -0.5589
+         20.00      0.1433     -0.6048
+
+    BODY ALONE LINEAR DATA GENERATED FROM MODIFIED NEWTONIAN FLOW THEORY
+
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   6
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      13.00                REYNOLDS NO = 2.575E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   9451.42 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ----- LONGITUDINAL -----     -- LATERAL DIRECTIONAL --
+         ALPHA       CN        CM        CA        CY       CLN       CLL
+
+          0.00     0.000     0.000     0.070    -0.000     0.000     0.000
+          2.00     0.082    -0.203     0.070    -0.000     0.000     0.000
+          4.00     0.195    -0.554     0.070    -0.000     0.000     0.000
+          6.00     0.320    -0.963     0.070    -0.000     0.000     0.000
+          8.00     0.470    -1.494     0.070    -0.000     0.000     0.000
+         10.00     0.648    -2.156     0.069    -0.000     0.000     0.000
+         12.00     0.848    -2.926     0.069    -0.000     0.000     0.000
+         14.00     1.069    -3.802     0.068    -0.000     0.000     0.000
+         16.00     1.310    -4.779     0.068    -0.000     0.000     0.000
+         18.00     1.570    -5.852     0.067    -0.000     0.000     0.000
+         20.00     1.848    -7.015     0.067    -0.000     0.000     0.000
+
+         ALPHA       CL        CD      CL/CD     X-C.P.
+
+          0.00     0.000     0.070     0.000    -1.966
+          2.00     0.079     0.073     1.085    -2.488
+          4.00     0.189     0.083     2.269    -2.846
+          6.00     0.311     0.103     3.020    -3.013
+          8.00     0.456     0.134     3.395    -3.178
+         10.00     0.626     0.181     3.465    -3.328
+         12.00     0.815     0.244     3.345    -3.452
+         14.00     1.020     0.325     3.141    -3.558
+         16.00     1.240     0.426     2.910    -3.648
+         18.00     1.473     0.549     2.682    -3.727
+         20.00     1.714     0.695     2.467    -3.796
+
+    X-C.P. MEAS. FROM MOMENT CENTER IN REF. LENGTHS, NEG. AFT OF MOMENT CENTER
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   7
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      13.00                REYNOLDS NO = 2.575E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =   9451.42 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ---------- DERIVATIVES (PER DEGREE) ----------
+         ALPHA       CNA         CMA         CYB         CLNB        CLLB
+          0.00      0.0329     -0.0647
+          2.00      0.0486     -0.1382
+          4.00      0.0595     -0.1899
+          6.00      0.0689     -0.2350
+          8.00      0.0820     -0.2979
+         10.00      0.0943     -0.3577
+         12.00      0.1052     -0.4113
+         14.00      0.1156     -0.4629
+         16.00      0.1254     -0.5122
+         18.00      0.1345     -0.5590
+         20.00      0.1434     -0.6049
+
+    BODY ALONE LINEAR DATA GENERATED FROM MODIFIED NEWTONIAN FLOW THEORY
+
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   8
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      15.00                REYNOLDS NO = 2.972E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =  12583.25 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ----- LONGITUDINAL -----     -- LATERAL DIRECTIONAL --
+         ALPHA       CN        CM        CA        CY       CLN       CLL
+
+          0.00     0.000     0.000     0.068    -0.000     0.000     0.000
+          2.00     0.082    -0.206     0.068    -0.000     0.000     0.000
+          4.00     0.192    -0.540     0.068    -0.000     0.000     0.000
+          6.00     0.316    -0.947     0.068    -0.000     0.000     0.000
+          8.00     0.470    -1.495     0.068    -0.000     0.000     0.000
+         10.00     0.648    -2.156     0.067    -0.000     0.000     0.000
+         12.00     0.848    -2.926     0.067    -0.000     0.000     0.000
+         14.00     1.069    -3.802     0.066    -0.000     0.000     0.000
+         16.00     1.310    -4.779     0.066    -0.000     0.000     0.000
+         18.00     1.571    -5.852     0.065    -0.000     0.000     0.000
+         20.00     1.848    -7.016     0.065    -0.000     0.000     0.000
+
+         ALPHA       CL        CD      CL/CD     X-C.P.
+
+          0.00     0.000     0.068     0.000    -2.078
+          2.00     0.080     0.071     1.127    -2.507
+          4.00     0.186     0.081     2.297    -2.817
+          6.00     0.308     0.100     3.061    -2.995
+          8.00     0.456     0.132     3.448    -3.178
+         10.00     0.626     0.179     3.505    -3.328
+         12.00     0.815     0.242     3.374    -3.452
+         14.00     1.021     0.323     3.161    -3.557
+         16.00     1.241     0.425     2.924    -3.648
+         18.00     1.473     0.548     2.691    -3.726
+         20.00     1.715     0.693     2.474    -3.796
+
+    X-C.P. MEAS. FROM MOMENT CENTER IN REF. LENGTHS, NEG. AFT OF MOMENT CENTER
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE   9
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      15.00                REYNOLDS NO = 2.972E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =  12583.25 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ---------- DERIVATIVES (PER DEGREE) ----------
+         ALPHA       CNA         CMA         CYB         CLNB        CLLB
+          0.00      0.0344     -0.0715
+          2.00      0.0479     -0.1348
+          4.00      0.0585     -0.1852
+          6.00      0.0697     -0.2385
+          8.00      0.0829     -0.3019
+         10.00      0.0944     -0.3577
+         12.00      0.1053     -0.4114
+         14.00      0.1156     -0.4630
+         16.00      0.1254     -0.5123
+         18.00      0.1345     -0.5590
+         20.00      0.1434     -0.6049
+
+    BODY ALONE LINEAR DATA GENERATED FROM MODIFIED NEWTONIAN FLOW THEORY
+
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE  10
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      17.00                REYNOLDS NO = 3.368E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =  16162.49 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ----- LONGITUDINAL -----     -- LATERAL DIRECTIONAL --
+         ALPHA       CN        CM        CA        CY       CLN       CLL
+
+          0.00     0.000     0.000     0.066    -0.000     0.000     0.000
+          2.00     0.083    -0.211     0.066    -0.000     0.000     0.000
+          4.00     0.189    -0.530     0.066    -0.000     0.000     0.000
+          6.00     0.316    -0.946     0.066    -0.000     0.000     0.000
+          8.00     0.470    -1.495     0.066    -0.000     0.000     0.000
+         10.00     0.648    -2.156     0.066    -0.000     0.000     0.000
+         12.00     0.848    -2.927     0.065    -0.000     0.000     0.000
+         14.00     1.069    -3.803     0.065    -0.000     0.000     0.000
+         16.00     1.310    -4.780     0.064    -0.000     0.000     0.000
+         18.00     1.571    -5.853     0.064    -0.000     0.000     0.000
+         20.00     1.849    -7.017     0.063    -0.000     0.000     0.000
+
+         ALPHA       CL        CD      CL/CD     X-C.P.
+
+          0.00     0.000     0.066     0.000    -2.192
+          2.00     0.081     0.069     1.168    -2.534
+          4.00     0.184     0.079     2.322    -2.796
+          6.00     0.307     0.099     3.109    -2.993
+          8.00     0.457     0.131     3.491    -3.177
+         10.00     0.627     0.177     3.537    -3.327
+         12.00     0.816     0.240     3.396    -3.452
+         14.00     1.022     0.322     3.176    -3.557
+         16.00     1.242     0.423     2.935    -3.647
+         18.00     1.474     0.546     2.699    -3.726
+         20.00     1.716     0.692     2.480    -3.796
+
+    X-C.P. MEAS. FROM MOMENT CENTER IN REF. LENGTHS, NEG. AFT OF MOMENT CENTER
+1         ***** THE USAF AUTOMATED MISSILE DATCOM * REV 3/99 *****     CASE   1
+               AERODYNAMIC METHODS FOR MISSILE CONFIGURATIONS          PAGE  11
+                   SPARTAN 3rd Stage, Mach 9+, Alpha 0-20                   
+                     STATIC AERODYNAMICS FOR BODY ALONE
+
+       ******* FLIGHT CONDITIONS AND REFERENCE QUANTITIES *******
+     MACH NO  =      17.00                REYNOLDS NO = 3.368E+05 /M
+     ALTITUDE =    50000.0 M         DYNAMIC PRESSURE =  16162.49 N/M**2
+     SIDESLIP =       0.00 DEG                   ROLL =      0.00 DEG     
+     REF AREA =      0.950 M**2         MOMENT CENTER =     0.000 M
+     REF LENGTH =     1.10 M           LAT REF LENGTH =      1.10 M
+
+                   ---------- DERIVATIVES (PER DEGREE) ----------
+         ALPHA       CNA         CMA         CYB         CLNB        CLLB
+          0.00      0.0360     -0.0789
+          2.00      0.0474     -0.1323
+          4.00      0.0582     -0.1836
+          6.00      0.0702     -0.2410
+          8.00      0.0830     -0.3023
+         10.00      0.0944     -0.3578
+         12.00      0.1053     -0.4114
+         14.00      0.1156     -0.4630
+         16.00      0.1254     -0.5123
+         18.00      0.1346     -0.5590
+         20.00      0.1434     -0.6049
+
+    BODY ALONE LINEAR DATA GENERATED FROM MODIFIED NEWTONIAN FLOW THEORY
+
+    *** END OF JOB ***
