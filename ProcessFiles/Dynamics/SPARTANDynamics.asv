@@ -202,6 +202,9 @@ L = 0.5*Cl.*A.*rho0.*v.^2;
 
 %Rotational Coordinates =================================================
 
+L
+D
+T
 
 
 [altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,eta,auxdata.delta);

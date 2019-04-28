@@ -1671,11 +1671,7 @@ end
 d = plot3m(rad2deg(lat3),rad2deg(lon3)',alt3*5,'b','LineWidth',1.7);
 e = plot3m(rad2deg(latexo),rad2deg(lonexo),altexo*5,'c','LineWidth',1.7);
 
-if returnMode == 1
-legend([a b c d e],{'First Stage Ascent','Second Stage Ascent', 'Second Stage Return','Third Stage Powered Ascent','Third Stage Unpowered Ascent'},'Location','east');
-else
- legend([a b d e],{'First Stage Ascent','Second Stage Ascent','Third Stage Powered Ascent','Third Stage Unpowered Ascent'},'Location','east');
-end
+
 
  ht = text(-500000,-1600000,'Australia');
  set(ht,'Rotation',20)
@@ -1749,6 +1745,11 @@ setm(handlem('scaleruler1'), ...
     'XLoc',-9.5e4,'YLoc',-1.5e6,...
     'MajorTick',0:200:400,'TickDir','down','RulerStyle','patches')
 
+if returnMode == 1
+legend([a b c d e],{'First Stage Ascent','Second Stage Ascent', 'Second Stage Return','Third Stage Powered Ascent','Third Stage Unpowered Ascent'},'Location','east');
+else
+ legend([a b d e],{'First Stage Ascent','Second Stage Ascent','Third Stage Powered Ascent','Third Stage Unpowered Ascent'},'Location','east');
+end
 % zoom(30) 
 %% Plot Visualisation of Net ISP & other performance
 plotperform = 'no'
@@ -2253,7 +2254,7 @@ dlmwrite(strcat('LatexInputs.txt'),'\hline \textbf{Payload to Orbit (kg)}', '-ap
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{\PayloadToOrbit', namelist{i},returnparam,'}' ), '-append' , 'delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(1,:)) || issorted(flip(ResultsMatrix(1,:)))
         Regression = RegressionList'\ResultsMatrix(1,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&\textbf{',num2str(round(Regression,1)),'}'), '-append' , 'delimiter','','newline', 'pc')
@@ -2268,7 +2269,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Payload Variation (\%)}', '-append'
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \PayloadVar', namelist{i},returnparam ), '-append' , 'delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(24,:)) || issorted(flip(ResultsMatrix(24,:)))
         Regression = RegressionList'\ResultsMatrix(24,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2284,7 +2285,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Total $\eta_{exergy}$ (\%)}', '-app
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{\totalExergyEff', namelist{i},returnparam,'}' ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(23,:)) || issorted(flip(ResultsMatrix(23,:)))
         Regression = RegressionList'\ResultsMatrix(23,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{',num2str(round(Regression,5)),'}'), '-append' , 'delimiter','','newline', 'pc')
@@ -2299,7 +2300,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{1$^{st}$ Stage $\eta_{exergy}$ (\%)
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{\firstExergyEff', namelist{i},returnparam,'}' ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(19,:)) || issorted(flip(ResultsMatrix(19,:)))
         Regression = RegressionList'\ResultsMatrix(19,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{',num2str(round(Regression,3)),'}'), '-append' , 'delimiter','','newline', 'pc')
@@ -2328,7 +2329,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation Alt, 1$\rightarrow$2 (km
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \firstsecondSeparationAlt', namelist{i},returnparam ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(2,:)) || issorted(flip(ResultsMatrix(2,:)))
         Regression = RegressionList'\ResultsMatrix(2,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2342,7 +2343,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation v, 1$\rightarrow$2 (m/s)
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \firstsecondSeparationv', namelist{i} ,returnparam), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(3,:)) || issorted(flip(ResultsMatrix(3,:)))
         Regression = RegressionList'\ResultsMatrix(3,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2356,7 +2357,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation $\gamma$, 1$\rightarrow$
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \firstsecondSeparationgamma', namelist{i},returnparam ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(4,:)) || issorted(flip(ResultsMatrix(4,:)))
         Regression = RegressionList'\ResultsMatrix(4,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2371,7 +2372,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{2$^{nd}$ Stage $\eta_{exergy}$ (\%)
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{\secondExergyEff', namelist{i},returnparam,'}' ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
 
     if issorted(ResultsMatrix(20,:)) || issorted(flip(ResultsMatrix(20,:)))
         Regression = RegressionList'\ResultsMatrix(20,:)';
@@ -2401,7 +2402,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation Alt, 2$\rightarrow$3 (km
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \secondthirdSeparationAlt', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(5,:)) || issorted(flip(ResultsMatrix(5,:)))
         Regression = RegressionList'\ResultsMatrix(5,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2415,7 +2416,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation $v$, 2$\rightarrow$3 (m/
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \secondthirdSeparationv', namelist{i},returnparam ), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(6,:)) || issorted(flip(ResultsMatrix(6,:)))
         Regression = RegressionList'\ResultsMatrix(6,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2429,7 +2430,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{Separation $\gamma$, 2$\rightarrow$
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \secondthirdSeparationgamma', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(7,:)) || issorted(flip(ResultsMatrix(7,:)))
         Regression = RegressionList'\ResultsMatrix(7,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2444,7 +2445,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{2$^{nd}$ Stage Flight Time (s)}', '
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \secondFlightTime', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(10,:)) || issorted(flip(ResultsMatrix(10,:)))
         Regression = RegressionList'\ResultsMatrix(10,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2459,7 +2460,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{2$^{nd}$ Stage Distance Flown (km)}
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \SecondDist', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(25,:)) || issorted(flip(ResultsMatrix(25,:)))
         Regression = RegressionList'\ResultsMatrix(25,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2476,7 +2477,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{2$^{nd}$ Stage Return Fuel (kg)}', 
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \returnFuel', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(15,:)) || issorted(flip(ResultsMatrix(15,:)))
         Regression = RegressionList'\ResultsMatrix(15,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2492,7 +2493,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{2$^{nd}$ Stage Return Distance (km)
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \returnDist', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(26,:)) || issorted(flip(ResultsMatrix(26,:)))
         Regression = RegressionList'\ResultsMatrix(26,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2510,7 +2511,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{3$^{rd}$ Stage $\eta_{exergy}$ (\%)
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{\thirddExergyEff', namelist{i},returnparam,'}' ), '-append','delimiter','','newline', 'pc')
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(21,:)) || issorted(flip(ResultsMatrix(21,:)))
         Regression = RegressionList'\ResultsMatrix(21,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('& \textbf{',num2str(round(Regression,3)),'}'), '-append' , 'delimiter','','newline', 'pc')
@@ -2540,7 +2541,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{3$^{rd}$ Stage $t$, $q >$ 5kpa (s)}
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \thirdqOverFive', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(11,:)) || issorted(flip(ResultsMatrix(11,:)))
         Regression = RegressionList'\ResultsMatrix(11,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2554,7 +2555,7 @@ dlmwrite(strcat('LatexInputs.txt'),' \textbf{3$^{rd}$ Stage max $\alpha$ (deg)}'
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \thirdmaxAoA', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(12,:)) || issorted(flip(ResultsMatrix(12,:)))
         Regression = RegressionList'\ResultsMatrix(12,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')
@@ -2569,7 +2570,7 @@ dlmwrite(strcat('LatexInputs.txt'),'\textbf{3$^{rd}$ Stage Fuel Mass (kg)}', '-a
 for i = 1:length(namelist)
 dlmwrite(strcat('LatexInputs.txt'),strcat('& \thirdmFuel', namelist{i},returnparam), '-append','delimiter','','newline', 'pc');
 end
-if mode ~= 1 && mode ~= 90 && mode ~=0
+if mode ~= 1 && mode ~= 90 && mode ~=0 && mode ~= 101
     if issorted(ResultsMatrix(22,:)) || issorted(flip(ResultsMatrix(22,:)))
         Regression = RegressionList'\ResultsMatrix(22,:)';
         dlmwrite(strcat('LatexInputs.txt'),strcat('&',num2str(round(Regression,2))), '-append' , 'delimiter','','newline', 'pc')

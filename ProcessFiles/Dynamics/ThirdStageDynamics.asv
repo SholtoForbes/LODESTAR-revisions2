@@ -77,11 +77,8 @@ g = 9.806; %standard gravity
 % Isp = 437; % from Tom Furgusens Thesis %RL10
 
 % BASELINE
-if mode ~= 1000
 Isp = 317.*0.98* auxdata.Isp3mod; %Kestrel, from Falcon 1 users guide, with efficiency reduction from area reduction. BASELINE
-else
-Isp = 317.*0.98 ;
-end
+
 % % Diameter 0.9m
 % Isp = 317.*0.96; %Kestrel, from Falcon 1 users guide, with efficiency reduction.
 
@@ -176,7 +173,6 @@ AoA_max = AoA_max.';
 
 % Calculate thrust, assuming that the exit area is equal to the total area
 % of the rocket
-
 T  = Isp.*mdot.*g - p .*A; % Thrust (N)
 % T = T* auxdata.Isp3mod; % Modify Thrust if necessary
 
@@ -187,12 +183,12 @@ CN  = CN_interp(M ,rad2deg(Alpha ),alt);
 cP  = CP_interp(M ,rad2deg(Alpha ),alt);
 
 if mode == 1000
-
+    Cd
+    C
 CD  = CD + CD*auxdata.Cn3mod.*sin(Alpha)+ CD*auxdata.Ca3mod.*cos(Alpha);
 CL  = CL + CL*auxdata.Cn3mod.*cos(Alpha)+ CL*auxdata.Ca3mod.*sin(Alpha);
 CN  = CN + CN*auxdata.Cm3mod; % This is modified by the moment modifier because it is only used to calculate moment, so this modification serves to modify the moment directly
 T = T + T*auxdata.Isp3mod;
-
 end
 
 % Calculate aerodynamic forces

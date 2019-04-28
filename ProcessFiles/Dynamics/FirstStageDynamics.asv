@@ -5,7 +5,6 @@ function [dz,q,xi,vec_angle,T,D,dm,M0,rho0,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_t
 
 % global mach
 interp = auxdata.interp;
-mode = auxdata.mode;
 
 alt = z(1,:);   %Height
 v = z(2,:);   %Velocity
@@ -71,9 +70,10 @@ T = Vehicle.T.SL + (101325 - P0)*Vehicle.T.Mod; % Thrust from Falcon 1 users gui
 T = T.*Throttle; % Throttle down
 
 if auxdata.mode == 1000
-   T = T + T.*auxdata.Isp1mod ; 
+   T = T.*auxdata.Isp1mod ; 
 end
     
+   
 
 Isp = Vehicle.Isp.SL + (101325 - P0)*Vehicle.Isp.Mod; % linear regression of SL and vacuum Isp. From encyclopaedia astronautica, backed up by falcon 1 users guide
 % T
@@ -92,21 +92,19 @@ Cl = interp.LiftGridded(M0,rad2deg(alpha)) + interp.Cl_gridded_Visc1(M0,rad2deg(
 
 Cm = (1-(auxdata.Vehicle.mFuel - (m - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel).*interp.MomentGriddedFull(M0,rad2deg(alpha)) + (auxdata.Vehicle.mFuel - (m - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel.*interp.MomentGriddedEmpty(M0,rad2deg(alpha));
 
-
 if mode == 1000
     % Modify coefficients by modifiers, using sigma mf to smoothly
     % transition between regimes. Regime switches at M=1, with a smooth
     % transition
-
+   
     Cl(M0<1) = Cl(M0<1) + Cl(M0<1).*(auxdata.CL12_subsonicmod.*(1-sigmf(M0(M0<1),[100,0.8])) + auxdata.CL12_transonicmod.*sigmf(M0(M0<1),[100,0.8]) + auxdata.CL12_supersonicmod.*sigmf(M0(M0<1),[100,1.2]));
     Cl(M0>=1) = Cl(M0>=1) + Cl(M0>=1).*(auxdata.CL12_subsonicmod.*(1-sigmf(M0(M0>=1),[100,0.8])) + auxdata.CL12_transonicmod.*(1-sigmf(M0(M0>=1),[100,1.2])) + auxdata.CL12_supersonicmod.*sigmf(M0(M0>=1),[100,1.2]));
-
-    Cd(M0<1) = Cd(M0<1) + Cd(M0<1).*(auxdata.CD12_subsonicmod.*(1-sigmf(M0(M0<1),[100,0.8])) + auxdata.CD12_transonicmod.*sigmf(M0(M0<1),[100,0.8]) + auxdata.CD12_supersonicmod.*sigmf(M0(M0<1),[100,1.2]));
-    Cd(M0>=1) = Cd(M0>=1) + Cd(M0>=1).*(auxdata.CD12_subsonicmod.*(1-sigmf(M0(M0>=1),[100,0.8])) + auxdata.CD12_transonicmod.*(1-sigmf(M0(M0>=1),[100,1.2])) + auxdata.CD12_supersonicmod.*sigmf(M0(M0>=1),[100,1.2]));
+    
+    Cd(M0<1) = Cd(M0<1) + Cd(M0<1).*(auxdata.Cd12_subsonicmod.*(1-sigmf(M0(M0<1),[100,0.8])) + auxdata.Cd12_transonicmod.*sigmf(M0(M0<1),[100,0.8]) + auxdata.Cd12_supersonicmod.*sigmf(M0(M0<1),[100,1.2]));
+    Cd(M0>=1) = Cd(M0>=1) + Cd(M0>=1).*(auxdata.Cd12_subsonicmod.*(1-sigmf(M0(M0>=1),[100,0.8])) + auxdata.Cd12_transonicmod.*(1-sigmf(M0(M0>=1),[100,1.2])) + auxdata.Cd12_supersonicmod.*sigmf(M0(M0>=1),[100,1.2]));
     
     Cm(M0<1) = Cm(M0<1) + Cm(M0<1).*(auxdata.Cm12_subsonicmod.*(1-sigmf(M0(M0<1),[100,0.8])) + auxdata.Cm12_transonicmod.*sigmf(M0(M0<1),[100,0.8]) + auxdata.Cm12_supersonicmod.*sigmf(M0(M0<1),[100,1.2]));
     Cm(M0>=1) = Cm(M0>=1) + Cm(M0>=1).*(auxdata.Cm12_subsonicmod.*(1-sigmf(M0(M0>=1),[100,0.8])) + auxdata.Cm12_transonicmod.*(1-sigmf(M0(M0>=1),[100,1.2])) + auxdata.Cm12_supersonicmod.*sigmf(M0(M0>=1),[100,1.2]));
-    
 end
 
 
