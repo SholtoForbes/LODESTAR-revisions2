@@ -1,0 +1,361 @@
+\newcommand{\PayloadToOrbitCase1}{136.4}
+\newcommand{\totalExergyEffCase1}{1.611}
+\newcommand{\ExergyEffsecondandthirdCase1}{0.000}
+\newcommand{\firstsecondSeparationAltCase1}{24.55}
+\newcommand{\firstsecondSeparationvCase1}{1536}
+\newcommand{\firstsecondSeparationgammaCase1}{11.1}
+\newcommand{\firstdExergyCase1}{13.94}
+\newcommand{\firstSpecExergyCase1}{0.84}
+\newcommand{\firstExergyEffCase1}{6.903}
+\newcommand{\firstWnextStageCase1}{6.807}
+\newcommand{\firstWpayloadCase1}{0.096}
+\newcommand{\firstExergyDestroyedCase1}{187.973}
+\newcommand{\firstEnergyCase1}{201.91}
+\newcommand{\WDoneCase1}{2.43}
+\newcommand{\PlossoneCase1}{86.97}
+\newcommand{\WmFoneCase1}{2.68}
+\newcommand{\WoneCase1}{1.02}
+\newcommand{\PlossoneCombinedCase1}{89.65}
+\newcommand{\FirstStageDistCase1}{37.1}
+\newcommand{\FirstStageSMFCase1}{0.080}
+\newcommand{\secondthirdSeparationAltCase1}{40.20}
+\newcommand{\secondthirdSeparationvCase1}{2568}
+\newcommand{\secondthirdSeparationqCase1}{12.3}
+\newcommand{\secondthirdSeparationgammaCase1}{10.3}
+\newcommand{\secondthirdSeparationLDCase1}{4.1}
+\newcommand{\secondFlightTimeCase1}{509.9}
+\newcommand{\returnFuelCase1}{236.0}
+\newcommand{\seconddExergyCase1}{7.49}
+\newcommand{\secondSpecExergyCase1}{5.65}
+\newcommand{\secondExergyEffCase1}{3.998}
+\newcommand{\secondExergythirdStageCase1}{7.492}
+\newcommand{\secondEnergyCase1}{159.07}
+\newcommand{\secondExergyDestroyedCase1}{179.886}
+\newcommand{\secondWnextStageCase1}{4.515}
+\newcommand{\secondWpayloadCase1}{0.195}
+\newcommand{\SecondDistCase1}{878.8}
+\newcommand{\returnEnergyCase1}{28.31}
+\newcommand{\returnDistCase1}{1447.0}
+\newcommand{\WDsecondCase1}{20.90}
+\newcommand{\PlosssecondCase1}{65.87}
+\newcommand{\WmFsecondCase1}{1.45}
+\newcommand{\WsecondCase1}{7.07}
+\newcommand{\PlosssecondCombinedCase1}{67.31}
+\newcommand{\WDreturnCase1}{103.36}
+\newcommand{\PlossreturnCombinedCase1}{61.17}
+\newcommand{\WmFreturnCase1}{-1.74}
+\newcommand{\WreturnCase1}{-64.53}
+\newcommand{\thirdqOverFiveCase1}{15.9}
+\newcommand{\thirdmaxAoACase1}{18.0}
+\newcommand{\thirdcircvCase1}{3676.6}
+\newcommand{\thirdcircmCase1}{1992.5}
+\newcommand{\thirdmFuelCase1}{2849.3}
+\newcommand{\thirddExergyCase1}{4.67}
+\newcommand{\thirddExergyEffCase1}{13.519}
+\newcommand{\thirdEnergyCase1}{34.58}
+\newcommand{\WDthreeCase1}{0.84}
+\newcommand{\WthreeCase1}{30.72}
+\newcommand{\WmFthreeCase1}{0.89}
+\newcommand{\HTlossCase1}{46.74}
+\newcommand{\WHSthreeCase1}{3.13}
+\newcommand{\PlossthreeCase1}{4.16}
+\newcommand{\PlossthreeCombinedCase1}{51.80}
+\newcommand{\thirdExergyDestroyedCase1}{29.902}
+\newcommand{\totaldExergyCase1}{26.10}
+\begin{tabular}{l c c c c c c} 
+\hline \textbf{Trajectory Condition}
+&Case1
+&Case2
+&Case3
+&Case4
+&Case5
+&Case6
+&Case7
+&Case8
+&Case9
+&Case10
+&Case11
+&Case12
+&Case13
+&Case14
+&Case15
+& $\Delta/\Delta$\%
+\\
+\hline \textbf{Payload to Orbit (kg)}
+& \textbf{\PayloadToOrbitCase1}
+& \textbf{\PayloadToOrbitCase2}
+& \textbf{\PayloadToOrbitCase3}
+& \textbf{\PayloadToOrbitCase4}
+& \textbf{\PayloadToOrbitCase5}
+& \textbf{\PayloadToOrbitCase6}
+& \textbf{\PayloadToOrbitCase7}
+& \textbf{\PayloadToOrbitCase8}
+& \textbf{\PayloadToOrbitCase9}
+& \textbf{\PayloadToOrbitCase10}
+& \textbf{\PayloadToOrbitCase11}
+& \textbf{\PayloadToOrbitCase12}
+& \textbf{\PayloadToOrbitCase13}
+& \textbf{\PayloadToOrbitCase14}
+& \textbf{\PayloadToOrbitCase15}
+\newcommand{\PayloadToOrbitCase1}{-314.3}
+\newcommand{\totalExergyEffCase1}{-2.739}
+\newcommand{\ExergyEffsecondandthirdCase1}{0.000}
+\newcommand{\firstsecondSeparationAltCase1}{24.55}
+\newcommand{\firstsecondSeparationvCase1}{1536}
+\newcommand{\firstsecondSeparationgammaCase1}{11.1}
+\newcommand{\firstdExergyCase1}{13.94}
+\newcommand{\firstSpecExergyCase1}{0.84}
+\newcommand{\firstExergyEffCase1}{6.903}
+\newcommand{\firstWnextStageCase1}{7.124}
+\newcommand{\firstWpayloadCase1}{-0.221}
+\newcommand{\firstExergyDestroyedCase1}{187.973}
+\newcommand{\firstEnergyCase1}{201.91}
+\newcommand{\WDoneCase1}{2.43}
+\newcommand{\PlossoneCase1}{86.97}
+\newcommand{\WmFoneCase1}{2.68}
+\newcommand{\WoneCase1}{1.02}
+\newcommand{\PlossoneCombinedCase1}{89.65}
+\newcommand{\FirstStageDistCase1}{37.1}
+\newcommand{\FirstStageSMFCase1}{0.080}
+\newcommand{\secondthirdSeparationAltCase1}{40.20}
+\newcommand{\secondthirdSeparationvCase1}{2568}
+\newcommand{\secondthirdSeparationqCase1}{12.3}
+\newcommand{\secondthirdSeparationgammaCase1}{10.3}
+\newcommand{\secondthirdSeparationLDCase1}{4.1}
+\newcommand{\secondFlightTimeCase1}{509.9}
+\newcommand{\returnFuelCase1}{236.0}
+\newcommand{\seconddExergyCase1}{7.49}
+\newcommand{\secondSpecExergyCase1}{5.65}
+\newcommand{\secondExergyEffCase1}{3.998}
+\newcommand{\secondExergythirdStageCase1}{7.492}
+\newcommand{\secondEnergyCase1}{159.07}
+\newcommand{\secondExergyDestroyedCase1}{179.886}
+\newcommand{\secondWnextStageCase1}{5.158}
+\newcommand{\secondWpayloadCase1}{-0.449}
+\newcommand{\SecondDistCase1}{878.8}
+\newcommand{\returnEnergyCase1}{28.31}
+\newcommand{\returnDistCase1}{1447.0}
+\newcommand{\WDsecondCase1}{20.88}
+\newcommand{\PlosssecondCase1}{65.89}
+\newcommand{\WmFsecondCase1}{1.45}
+\newcommand{\WsecondCase1}{7.07}
+\newcommand{\PlosssecondCombinedCase1}{67.33}
+\newcommand{\WDreturnCase1}{105.65}
+\newcommand{\PlossreturnCombinedCase1}{58.88}
+\newcommand{\WmFreturnCase1}{-1.74}
+\newcommand{\WreturnCase1}{-64.53}
+\newcommand{\thirdqOverFiveCase1}{15.9}
+\newcommand{\thirdmaxAoACase1}{18.0}
+\newcommand{\thirdcircvCase1}{3676.6}
+\newcommand{\thirdcircmCase1}{1992.5}
+\newcommand{\thirdmFuelCase1}{3300.0}
+\newcommand{\thirddExergyCase1}{-10.77}
+\newcommand{\thirddExergyEffCase1}{-26.897}
+\newcommand{\thirdEnergyCase1}{40.04}
+\newcommand{\WDthreeCase1}{0.72}
+\newcommand{\WthreeCase1}{26.52}
+\newcommand{\WmFthreeCase1}{1.18}
+\newcommand{\HTlossCase1}{88.15}
+\newcommand{\WHSthreeCase1}{2.70}
+\newcommand{\PlossthreeCase1}{7.62}
+\newcommand{\PlossthreeCombinedCase1}{96.95}
+\newcommand{\thirdExergyDestroyedCase1}{50.816}
+\newcommand{\totaldExergyCase1}{10.66}
+\begin{tabular}{l c c c c c c} 
+\hline \textbf{Trajectory Condition}
+&Case1
+&Case2
+&Case3
+&Case4
+&Case5
+&Case6
+&Case7
+&Case8
+&Case9
+&Case10
+&Case11
+&Case12
+&Case13
+&Case14
+&Case15
+& $\Delta/\Delta$\%
+\\
+\hline \textbf{Payload to Orbit (kg)}
+& \textbf{\PayloadToOrbitCase1}
+& \textbf{\PayloadToOrbitCase2}
+& \textbf{\PayloadToOrbitCase3}
+& \textbf{\PayloadToOrbitCase4}
+& \textbf{\PayloadToOrbitCase5}
+& \textbf{\PayloadToOrbitCase6}
+& \textbf{\PayloadToOrbitCase7}
+& \textbf{\PayloadToOrbitCase8}
+& \textbf{\PayloadToOrbitCase9}
+& \textbf{\PayloadToOrbitCase10}
+& \textbf{\PayloadToOrbitCase11}
+& \textbf{\PayloadToOrbitCase12}
+& \textbf{\PayloadToOrbitCase13}
+& \textbf{\PayloadToOrbitCase14}
+& \textbf{\PayloadToOrbitCase15}
+\newcommand{\PayloadToOrbitCase1}{-314.3}
+\newcommand{\totalExergyEffCase1}{-2.739}
+\newcommand{\ExergyEffsecondandthirdCase1}{0.000}
+\newcommand{\firstsecondSeparationAltCase1}{24.55}
+\newcommand{\firstsecondSeparationvCase1}{1536}
+\newcommand{\firstsecondSeparationgammaCase1}{11.1}
+\newcommand{\firstdExergyCase1}{13.94}
+\newcommand{\firstSpecExergyCase1}{0.84}
+\newcommand{\firstExergyEffCase1}{6.903}
+\newcommand{\firstWnextStageCase1}{7.124}
+\newcommand{\firstWpayloadCase1}{-0.221}
+\newcommand{\firstExergyDestroyedCase1}{187.973}
+\newcommand{\firstEnergyCase1}{201.91}
+\newcommand{\WDoneCase1}{2.43}
+\newcommand{\PlossoneCase1}{86.97}
+\newcommand{\WmFoneCase1}{2.68}
+\newcommand{\WoneCase1}{1.02}
+\newcommand{\PlossoneCombinedCase1}{89.65}
+\newcommand{\FirstStageDistCase1}{37.1}
+\newcommand{\FirstStageSMFCase1}{0.080}
+\newcommand{\secondthirdSeparationAltCase1}{40.20}
+\newcommand{\secondthirdSeparationvCase1}{2568}
+\newcommand{\secondthirdSeparationqCase1}{12.3}
+\newcommand{\secondthirdSeparationgammaCase1}{10.3}
+\newcommand{\secondthirdSeparationLDCase1}{4.1}
+\newcommand{\secondFlightTimeCase1}{509.9}
+\newcommand{\returnFuelCase1}{236.0}
+\newcommand{\seconddExergyCase1}{7.49}
+\newcommand{\secondSpecExergyCase1}{5.65}
+\newcommand{\secondExergyEffCase1}{3.998}
+\newcommand{\secondExergythirdStageCase1}{7.492}
+\newcommand{\secondEnergyCase1}{159.07}
+\newcommand{\secondExergyDestroyedCase1}{179.886}
+\newcommand{\secondWnextStageCase1}{5.158}
+\newcommand{\secondWpayloadCase1}{-0.449}
+\newcommand{\SecondDistCase1}{878.8}
+\newcommand{\returnEnergyCase1}{28.31}
+\newcommand{\returnDistCase1}{1447.0}
+\newcommand{\WDsecondCase1}{20.88}
+\newcommand{\PlosssecondCase1}{65.89}
+\newcommand{\WmFsecondCase1}{1.45}
+\newcommand{\WsecondCase1}{7.07}
+\newcommand{\PlosssecondCombinedCase1}{67.33}
+\newcommand{\WDreturnCase1}{105.65}
+\newcommand{\PlossreturnCombinedCase1}{58.88}
+\newcommand{\WmFreturnCase1}{-1.74}
+\newcommand{\WreturnCase1}{-64.53}
+\newcommand{\thirdqOverFiveCase1}{15.9}
+\newcommand{\thirdmaxAoACase1}{18.0}
+\newcommand{\thirdcircvCase1}{3676.6}
+\newcommand{\thirdcircmCase1}{1992.5}
+\newcommand{\thirdmFuelCase1}{3300.0}
+\newcommand{\thirddExergyCase1}{-10.77}
+\newcommand{\thirddExergyEffCase1}{-26.897}
+\newcommand{\thirdEnergyCase1}{40.04}
+\newcommand{\WDthreeCase1}{0.72}
+\newcommand{\WthreeCase1}{26.52}
+\newcommand{\WmFthreeCase1}{1.18}
+\newcommand{\HTlossCase1}{88.15}
+\newcommand{\WHSthreeCase1}{2.70}
+\newcommand{\PlossthreeCase1}{7.62}
+\newcommand{\PlossthreeCombinedCase1}{96.95}
+\newcommand{\thirdExergyDestroyedCase1}{50.816}
+\newcommand{\totaldExergyCase1}{10.66}
+\begin{tabular}{l c c c c c c} 
+\hline \textbf{Trajectory Condition}
+&Case1
+&Case2
+&Case3
+&Case4
+&Case5
+&Case6
+&Case7
+&Case8
+&Case9
+&Case10
+&Case11
+&Case12
+&Case13
+&Case14
+&Case15
+& $\Delta/\Delta$\%
+\\
+\hline \textbf{Payload to Orbit (kg)}
+& \textbf{\PayloadToOrbitCase1}
+& \textbf{\PayloadToOrbitCase2}
+& \textbf{\PayloadToOrbitCase3}
+& \textbf{\PayloadToOrbitCase4}
+& \textbf{\PayloadToOrbitCase5}
+& \textbf{\PayloadToOrbitCase6}
+& \textbf{\PayloadToOrbitCase7}
+& \textbf{\PayloadToOrbitCase8}
+& \textbf{\PayloadToOrbitCase9}
+& \textbf{\PayloadToOrbitCase10}
+& \textbf{\PayloadToOrbitCase11}
+& \textbf{\PayloadToOrbitCase12}
+& \textbf{\PayloadToOrbitCase13}
+& \textbf{\PayloadToOrbitCase14}
+& \textbf{\PayloadToOrbitCase15}
+\newcommand{\PayloadToOrbitCase1}{136.4}
+\newcommand{\totalExergyEffCase1}{1.611}
+\newcommand{\ExergyEffsecondandthirdCase1}{0.000}
+\newcommand{\firstsecondSeparationAltCase1}{24.55}
+\newcommand{\firstsecondSeparationvCase1}{1536}
+\newcommand{\firstsecondSeparationgammaCase1}{11.1}
+\newcommand{\firstdExergyCase1}{13.94}
+\newcommand{\firstSpecExergyCase1}{0.84}
+\newcommand{\firstExergyEffCase1}{6.903}
+\newcommand{\firstWnextStageCase1}{6.807}
+\newcommand{\firstWpayloadCase1}{0.096}
+\newcommand{\firstExergyDestroyedCase1}{187.973}
+\newcommand{\firstEnergyCase1}{201.91}
+\newcommand{\WDoneCase1}{2.43}
+\newcommand{\PlossoneCase1}{86.97}
+\newcommand{\WmFoneCase1}{2.68}
+\newcommand{\WoneCase1}{1.02}
+\newcommand{\PlossoneCombinedCase1}{89.65}
+\newcommand{\FirstStageDistCase1}{37.1}
+\newcommand{\FirstStageSMFCase1}{0.080}
+\newcommand{\secondthirdSeparationAltCase1}{40.20}
+\newcommand{\secondthirdSeparationvCase1}{2568}
+\newcommand{\secondthirdSeparationqCase1}{12.3}
+\newcommand{\secondthirdSeparationgammaCase1}{10.3}
+\newcommand{\secondthirdSeparationLDCase1}{4.1}
+\newcommand{\secondFlightTimeCase1}{509.9}
+\newcommand{\returnFuelCase1}{236.0}
+\newcommand{\seconddExergyCase1}{7.49}
+\newcommand{\secondSpecExergyCase1}{5.65}
+\newcommand{\secondExergyEffCase1}{3.998}
+\newcommand{\secondExergythirdStageCase1}{7.492}
+\newcommand{\secondEnergyCase1}{159.07}
+\newcommand{\secondExergyDestroyedCase1}{179.886}
+\newcommand{\secondWnextStageCase1}{4.515}
+\newcommand{\secondWpayloadCase1}{0.195}
+\newcommand{\SecondDistCase1}{878.8}
+\newcommand{\returnEnergyCase1}{28.31}
+\newcommand{\returnDistCase1}{1447.0}
+\newcommand{\WDsecondCase1}{20.88}
+\newcommand{\PlosssecondCase1}{65.89}
+\newcommand{\WmFsecondCase1}{1.45}
+\newcommand{\WsecondCase1}{7.07}
+\newcommand{\PlosssecondCombinedCase1}{67.33}
+\newcommand{\WDreturnCase1}{105.65}
+\newcommand{\PlossreturnCombinedCase1}{58.88}
+\newcommand{\WmFreturnCase1}{-1.74}
+\newcommand{\WreturnCase1}{-64.53}
+\newcommand{\thirdqOverFiveCase1}{15.9}
+\newcommand{\thirdmaxAoACase1}{18.0}
+\newcommand{\thirdcircvCase1}{3676.6}
+\newcommand{\thirdcircmCase1}{1992.5}
+\newcommand{\thirdmFuelCase1}{2849.3}
+\newcommand{\thirddExergyCase1}{4.67}
+\newcommand{\thirddExergyEffCase1}{13.519}
+\newcommand{\thirdEnergyCase1}{34.58}
+\newcommand{\WDthreeCase1}{0.84}
+\newcommand{\WthreeCase1}{30.72}
+\newcommand{\WmFthreeCase1}{0.89}
+\newcommand{\HTlossCase1}{46.74}
+\newcommand{\WHSthreeCase1}{3.13}
+\newcommand{\PlossthreeCase1}{4.16}
+\newcommand{\PlossthreeCombinedCase1}{51.80}
+\newcommand{\thirdExergyDestroyedCase1}{29.902}
+\newcommand{\totaldExergyCase1}{26.10}

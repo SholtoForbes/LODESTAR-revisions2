@@ -36,8 +36,11 @@ T = 0; % Set thrust to 0
 % the Isp influences the optimal burn mass
 % Isp = 437; % from Tom Furgusens Thesis %RL10
 
+if auxdata.mode == 1000
+Isp = 317.*0.98;
+else
 Isp = 317.*0.98* auxdata.Isp3mod; %Kestrel, from Falcon 1 users guide, with efficiency reduction
-
+end
 % Isp = 320
 % Isp = 446; %HM7B
 % Isp = 340; %Aestus 2

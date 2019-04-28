@@ -38,7 +38,7 @@ clc
 % mode 0: Alternate launch location
 % mode 101: rainbow beach launch
 
-mode = 1
+mode = 1000
 auxdata.mode = mode;
 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
