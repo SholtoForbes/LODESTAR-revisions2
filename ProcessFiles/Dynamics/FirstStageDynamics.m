@@ -131,9 +131,6 @@ D = 0.5*Cd.*Area.*rho0.*v.^2*auxdata.Cdmod;
 global L
 L = 0.5*Cl.*Area.*rho0.*v.^2;
 
-%modify lift and thrust for vectoring
-% L = L + T.*sin(vec_angle);
-% T = T.*cos(vec_angle);
 
 switch phase
     case 'prepitch'
@@ -147,7 +144,6 @@ xi = zeros(1,length(alt));
 
 % This determines the dynamics of the system.
 % Set up like this because xi is a quasi-forward sim instead of a primal
-
 
 
 

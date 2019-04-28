@@ -51,11 +51,8 @@ c_50 = ppval(auxdata.interp.c_spline, Alt_50);
 M_50 = v(1)./c_50;
 % M_50 = 2922.8./c_50;% using a constant velocity
 
-CN_50 = CN_interp(M_50,10, Alt_50);
+CN_50 = CN_interp(M_50,10, Alt_50); % note this is not modified for hypercube, because both the cn at 50, and the max aoa cn will be modified and cancel out
 
-if mode == 1000
-    CN_50 = CN_50 + CN_50*auxdata.Cn3mod;
-end
 
 % CN_50 = CN_interp(M_50,5);
 % AoA_max = deg2rad(Max_AoA_interp(M_init,CN_50.*50000./q_init)); %maximum allowable AoA
@@ -80,7 +77,7 @@ g = 9.806; %standard gravity
 if mode ~= 1000
 Isp = 317.*0.98* auxdata.Isp3mod; %Kestrel, from Falcon 1 users guide, with efficiency reduction from area reduction. BASELINE
 else
-Isp = 317.*0.98 ;
+Isp = 317.*0.98 ; % if mode = 1000 isp3mod is used later
 end
 % % Diameter 0.9m
 % Isp = 317.*0.96; %Kestrel, from Falcon 1 users guide, with efficiency reduction.
@@ -210,8 +207,8 @@ N  = 1./2.*rho.*(v.^2).*A.*CN ;
 
 Vec_angle  = asin((CG+(cP.*1.1))./(L_ThirdStage-CG-1.5).*(N)./T - Alphadot.*I./((L_ThirdStage-CG-1.5).*T)); % calculate the thrust vector angle necessary to resist the lift force moment. cP is in ref lengths. note cP is negative from tip
 
-if any(L  > T*sin(deg2rad(80)))
-Vec_angle(L  > T*sin(deg2rad(80)))  = deg2rad(80); % This stope the vector angle going imaginary
+if any(not(isreal(Vec_angle)))
+Vec_angle(not(isreal(Vec_angle)))  = deg2rad(80); % This stops the vector angle going imaginary
 end
 
 

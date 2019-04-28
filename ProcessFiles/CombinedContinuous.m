@@ -50,7 +50,7 @@ time21 = input.phase(2).time;
 
 
 
-[altdot21,londot21,latdot21,fpadot21,vdot21,azidot21, q21, M21, Fd, rho,L,Fueldt21,T3,Isp21,q21_aftershock,flap_deflection21,heating_rate21] = SPARTANDynamics(gamma21, alt21, v21,auxdata,zeta21,lat21,lon21,Alpha21,eta21,throttle21, mFuel21,mFuel21(1),mFuel21(end), 1, 0);
+[altdot21,londot21,latdot21,fpadot21,vdot21,azidot21, q21, M21, Fd, rho,L,Fueldt21,T21,Isp21,q21_aftershock,flap_deflection21,heating_rate21] = SPARTANDynamics(gamma21, alt21, v21,auxdata,zeta21,lat21,lon21,Alpha21,eta21,throttle21, mFuel21,mFuel21(1),mFuel21(end), 1, 0);
 
 % ---------------------------------------------------%
 % ---- Evaluate Right-Hand Side of the Dynamics ---- %

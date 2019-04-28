@@ -38,7 +38,7 @@ clc
 % mode 0: Alternate launch location
 % mode 101: rainbow beach launch
 
-mode = 1000
+mode = 1
 auxdata.mode = mode;
 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -1370,7 +1370,7 @@ if mode == 1000
         
 
 
-        setup_variations{i}.auxdata.Isp1mod = unc.ISP1/100*(Hypercube(i,2)-0.5)*2 ; % calculate modifiers using hypercube, change interval from 0,1 to -1,1
+        setup_variations{i}.auxdata.Isp1mod = unc.ISP1/100*(Hypercube(i,2)-0.5)*2; % calculate modifiers using hypercube, change interval from 0,1 to -1,1
         setup_variations{i}.auxdata.CL12_subsonicmod = unc.CL12_subsonic/100*(Hypercube(i,3)-0.5)*2 ;
         setup_variations{i}.auxdata.CL12_transonicmod = unc.CL12_transonic/100*(Hypercube(i,3)-0.5)*2 ;
         setup_variations{i}.auxdata.CL12_supersonicmod = unc.CL12_supersonic/100*(Hypercube(i,3)-0.5)*2 ;
@@ -1506,7 +1506,7 @@ if mode == 1000
         % analysis
 
 
-        setup_variations{j}.auxdata = AeroCalc(setup_variations{i}.auxdata);
+        setup_variations{j}.auxdata = AeroCalc(setup_variations{j}.auxdata);
     
 end
     

@@ -43,6 +43,7 @@ rdot = v.*sin(gamma);
 
 xidot = v.*cos(gamma).*cos(zeta)./(r.*cos(phi));
 
+
 phidot = v.*cos(gamma).*sin(zeta)./r;
 
 total_lift = T.*sin(alpha+vec_angle) + L;
