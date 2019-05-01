@@ -38,7 +38,7 @@ clc
 % mode 0: Alternate launch location
 % mode 101: rainbow beach launch
 
-mode = 101
+mode = 1000
 auxdata.mode = mode;
 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -234,20 +234,20 @@ unc.Cn3 = 8.9;
 unc.CM3 = 17.4;
 unc.ISP3 = 1.3;
 
-CreateCube = 'yes'
+CreateCube = 'no'
 
 if strcmp(CreateCube,'yes')
-Hypercube = lhsdesign(100,9);
-Hypercube = [[1:100]' , Hypercube]; %include case numbers
+Hypercube = lhsdesign(15,9);
+Hypercube = [[1:15]' , Hypercube]; %include case numbers
 dlmwrite('LHC',Hypercube,'delimiter',' ');
 clear Hypercube
 end
 
 Hypercube = dlmread('LHC');
 
-namelist = [];
+
 for i = 1:length(Hypercube(:,1))
-    namelist(i) = strcat('Case',num2str(Hypercube(i,1)));
+    namelist{i} = strcat('Case',num2str(Hypercube(i,1)));
 end
     
 end
@@ -896,108 +896,14 @@ end
 % Create spline for use in vehicle model.
 auxdata.interp.IspGridded = griddedInterpolant(grid.Mgrid_eng,grid.T_eng,Isp_grid,'spline','spline');
 %% Aerodynamic Data
+% Call aerodynamic importer and interpolator if not doing hypercube
+% analysis
 
-% Fetch aerodynamic data and compute interpolation splines.
-% Calculate the flap deflection necessary for trim.
-% Each set of aero corresponds to a different CG. 
+if mode ~= 1000
+    
+auxdata = AeroCalc(auxdata);
 
-
-
-Viscousaero_EngineOn = importdata('VC3D_viscousCoefficients_ascent.dat');
-Viscousaero_EngineOff = importdata('VC3D_viscousCoefficients_descent.dat');
-
-% These aerodynamic datasets have been created in ClicCalcCGVar.m
-
-T_L = -1.327; % Thrust location in z, average (m), measured from CREO
-
-% Full of fuel, with third stage
-CG = 15.24;
-CG_z = 0.049; % Centre of gravity location in z, calculated from Creo
-
-aero1.aero_EngineOff = importdata('SPARTANaero15.24');
-aero1.flapaero = importdata('SPARTANaeroFlaps15.24');
-aero1.aero_EngineOn = importdata('SPARTANaeroEngineOn15.24');
-aero1.aero_Engine = importdata('SPARTANEngine15.24');
-aero1.Viscousaero_EngineOff = Viscousaero_EngineOff;
-aero1.Viscousaero_EngineOn = Viscousaero_EngineOn;
-
-[auxdata.interp.Cl_spline_EngineOff.fullFuel,auxdata.interp.Cd_spline_EngineOff.fullFuel,...
-    auxdata.interp.Cl_spline_EngineOn.fullFuel,auxdata.interp.Cd_spline_EngineOn.fullFuel,...
-    auxdata.interp.flap_spline_EngineOff.fullFuel,auxdata.interp.flap_spline_EngineOn.fullFuel,...
-    auxdata.T_spline_Rear,auxdata.Fd_spline_NoEngine,auxdata.Cd_spline_ViscousEngineOff,auxdata.Cd_spline_ViscousEngineOn,...
-    auxdata.L_spline_Rear,auxdata.T_spline] = AeroInt(aero1,auxdata,T_L,CG_z,CG);
-
-
-% Cylindrical fuel tanks depleted, with third stage
-CG = 15.13;
-CG_z = 0.077;
-
-aero2.aero_EngineOff = importdata('SPARTANaero15.13');
-aero2.flapaero = importdata('SPARTANaeroFlaps15.13');
-aero2.aero_EngineOn = importdata('SPARTANaeroEngineOn15.13');
-aero2.aero_Engine = importdata('SPARTANEngine15.13');
-aero2.Viscousaero_EngineOff = Viscousaero_EngineOff;
-aero2.Viscousaero_EngineOn = Viscousaero_EngineOn;
-
-[auxdata.interp.Cl_spline_EngineOff.cylTankEnd,auxdata.interp.Cd_spline_EngineOff.cylTankEnd,auxdata.interp.Cl_spline_EngineOn.cylTankEnd,auxdata.interp.Cd_spline_EngineOn.cylTankEnd,auxdata.interp.flap_spline_EngineOff.cylTankEnd,auxdata.interp.flap_spline_EngineOn.cylTankEnd] = AeroInt(aero2,auxdata,T_L,CG_z,CG);
-
-
-
-% Empty, with third stage. 
-
-CG = 15.74;
-CG_z = 0.086;
-
-aero3.aero_EngineOff = importdata('SPARTANaero15.74');
-aero3.flapaero = importdata('SPARTANaeroFlaps15.74');
-aero3.aero_EngineOn = importdata('SPARTANaeroEngineOn15.74');
-aero3.aero_Engine = importdata('SPARTANEngine15.74');
-aero3.Viscousaero_EngineOff = Viscousaero_EngineOff;
-aero3.Viscousaero_EngineOn = Viscousaero_EngineOn;
-
-[auxdata.interp.Cl_spline_EngineOff.noFuel,auxdata.interp.Cd_spline_EngineOff.noFuel,auxdata.interp.Cl_spline_EngineOn.noFuel,auxdata.interp.Cd_spline_EngineOn.noFuel,auxdata.interp.flap_spline_EngineOff.noFuel,auxdata.interp.flap_spline_EngineOn.noFuel] = AeroInt(aero3,auxdata,T_L,CG_z,CG);
-
-% Flyback, empty without third stage, empty.
-CG = 15.16;
-CG_z = -0.2134; % calculated fom CREO
-
-aero4.aero_EngineOff = importdata('SPARTANaero15.16');
-aero4.flapaero = importdata('SPARTANaeroFlaps15.16');
-aero4.aero_EngineOn = importdata('SPARTANaeroEngineOn15.16');
-aero4.aero_Engine = importdata('SPARTANEngine15.16');
-aero4.Viscousaero_EngineOff = Viscousaero_EngineOff;
-aero4.Viscousaero_EngineOn = Viscousaero_EngineOn;
-
-[auxdata.interp.Cl_spline_EngineOff.noThirdStageEmpty,...
-    auxdata.interp.Cd_spline_EngineOff.noThirdStageEmpty,auxdata.interp.Cl_spline_EngineOn.noThirdStageEmpty,...
-    auxdata.interp.Cd_spline_EngineOn.noThirdStageEmpty,auxdata.interp.flap_spline_EngineOff.noThirdStageEmpty,...
-    auxdata.interp.flap_spline_EngineOn.noThirdStageEmpty] = AeroInt(aero4,auxdata,T_L,CG_z,CG);
-
-% Flyback, empty without third stage, conical fuel tank full.
-CG = 14.3;
-CG_z = -0.183; % calculated fom CREO
-
-aero5.aero_EngineOff = importdata('SPARTANaero14.3');
-aero5.flapaero = importdata('SPARTANaeroFlaps14.3');
-aero5.aero_EngineOn = importdata('SPARTANaeroEngineOn14.3');
-aero5.aero_Engine = importdata('SPARTANEngine14.3');
-aero5.Viscousaero_EngineOff = Viscousaero_EngineOff;
-aero5.Viscousaero_EngineOn = Viscousaero_EngineOn;
-
-[auxdata.interp.Cl_spline_EngineOff.noThirdStagecylTankEnd,...
-    auxdata.interp.Cd_spline_EngineOff.noThirdStagecylTankEnd,auxdata.interp.Cl_spline_EngineOn.noThirdStagecylTankEnd,...
-    auxdata.interp.Cd_spline_EngineOn.noThirdStagecylTankEnd,auxdata.interp.flap_spline_EngineOff.noThirdStagecylTankEnd,...
-    auxdata.interp.flap_spline_EngineOn.noThirdStagecylTankEnd] = AeroInt(aero5,auxdata,T_L,CG_z,CG);
-
-
-clear aero1
-clear aero2
-clear aero3
-clear aero4
-clear aero5
-clear Viscousaero_EngineOn
-clear Viscousaero_EngineOff
-
+end
 
 %% Import Bounds %%========================================================
 
@@ -1457,29 +1363,31 @@ if mode == 99
 end
 
 %% For Hypercube
-unc.ISP1 = 1.3;
-unc.CL12_subsonic = 16.5;
-unc.CL12_transonic = 28.7;
-unc.CL12_supersonic = 1.3;
-unc.CD12_subsonic = 20;
-unc.CD12_transonic = 18;
-unc.CD12_supersonic = 11;
-unc.CM12_subsonic = 23;
-unc.CM12_transonic = 67.1;
-unc.CM12_supersonic = 22;
-unc.ISP2 = 25;
-unc.Ca3 = 34.5;
-unc.Cn3 = 8.9;
-unc.CM3 = 17.4;
-unc.ISP3 = 1.3;
 
 if mode == 1000
     for i = 1:length(Hypercube(:,1))  
         setup_variations{i} = setup;
         
 
-        setup_variations{i}.auxdata.Isp1mod = ;
-        setup_variations{i}.auxdata.Isp1mod = ;
+
+        setup_variations{i}.auxdata.Isp1mod = unc.ISP1/100*(Hypercube(i,2)-0.5)*2; % calculate modifiers using hypercube, change interval from 0,1 to -1,1
+        setup_variations{i}.auxdata.CL12_subsonicmod = unc.CL12_subsonic/100*(Hypercube(i,3)-0.5)*2 ;
+        setup_variations{i}.auxdata.CL12_transonicmod = unc.CL12_transonic/100*(Hypercube(i,3)-0.5)*2 ;
+        setup_variations{i}.auxdata.CL12_supersonicmod = unc.CL12_supersonic/100*(Hypercube(i,3)-0.5)*2 ;
+        setup_variations{i}.auxdata.CD12_subsonicmod = unc.CD12_subsonic/100*(Hypercube(i,4)-0.5)*2 ;
+        setup_variations{i}.auxdata.CD12_transonicmod = unc.CD12_transonic/100*(Hypercube(i,4)-0.5)*2 ;
+        setup_variations{i}.auxdata.CD12_supersonicmod = unc.CD12_supersonic/100*(Hypercube(i,4)-0.5)*2 ;
+        setup_variations{i}.auxdata.Cm12_subsonicmod = unc.CM12_subsonic/100*(Hypercube(i,5)-0.5)*2 ;
+        setup_variations{i}.auxdata.Cm12_transonicmod = unc.CM12_transonic/100*(Hypercube(i,5)-0.5)*2 ;
+        setup_variations{i}.auxdata.Cm12_supersonicmod = unc.CM12_supersonic/100*(Hypercube(i,5)-0.5)*2 ;
+        setup_variations{i}.auxdata.Isp2mod = unc.ISP2/100*(Hypercube(i,6)-0.5)*2 ;
+        setup_variations{i}.auxdata.Ca3mod = unc.Ca3/100*(Hypercube(i,7)-0.5)*2 ;
+        setup_variations{i}.auxdata.Cn3mod = unc.Cn3/100*(Hypercube(i,8)-0.5)*2 ;
+        setup_variations{i}.auxdata.Cm3mod = unc.CM3/100*(Hypercube(i,9)-0.5)*2 ;
+        setup_variations{i}.auxdata.Isp3mod = unc.ISP3/100*(Hypercube(i,10)-0.5)*2 ;
+        
+        
+
     end
     
 end
@@ -1591,6 +1499,16 @@ end
 
 for j = 1:length(setup_variations)
 disp(['Starting Setup Variation ',num2str(j)])
+
+if mode == 1000
+    %% Aerodynamic Data
+        % Call aerodynamic importer and interpolator if not doing hypercube
+        % analysis
+
+
+        setup_variations{j}.auxdata = AeroCalc(setup_variations{j}.auxdata);
+    
+end
     
 for i = 1:num_it
 setup_par(i) = setup_variations{j};
@@ -1625,7 +1543,7 @@ output_temp = gpops2(setup_par(i)); % Run GPOPS-2. Use setup for each parallel i
 % error(i) = abs(mFuel22(end) - f_y(end,7));
 
 input_test = output_temp.result.solution;
-input_test.auxdata = auxdata;
+input_test.auxdata = setup_par(1).auxdata;
 phaseout_test = CombinedContinuous(input_test);
 norm_error1 = [];
 for num = [1:6 9]

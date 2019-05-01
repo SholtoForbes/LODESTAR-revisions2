@@ -234,7 +234,7 @@ unc.Cn3 = 8.9;
 unc.CM3 = 17.4;
 unc.ISP3 = 1.3;
 
-CreateCube = 'no'
+CreateCube = 'yes'
 
 if strcmp(CreateCube,'yes')
 Hypercube = lhsdesign(15,9);
@@ -1543,7 +1543,7 @@ output_temp = gpops2(setup_par(i)); % Run GPOPS-2. Use setup for each parallel i
 % error(i) = abs(mFuel22(end) - f_y(end,7));
 
 input_test = output_temp.result.solution;
-input_test.auxdata = auxdata;
+input_test.auxdata = setup_par(i).auxdata;
 phaseout_test = CombinedContinuous(input_test);
 norm_error1 = [];
 for num = [1:6 9]
