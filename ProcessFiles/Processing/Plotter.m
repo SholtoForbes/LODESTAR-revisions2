@@ -185,9 +185,9 @@ ThirdStagePayloadMass = mpayload;
 
 nodes = length(alt21)
 
-[altdot21,xidot21,phidot21,gammadot21,a21,zetadot21, q21, M21, Fd21, rho021,L21,Fueldt21,T21,Isp21,q121,flapdeflection21,heating_rate21,CG21,T121,P121,M121,P021,T021,P_1_tip21,T_1_tip21,rho_1_tip21,M_1_tip21,v_1_tip21] = SPARTANDynamics(gamma21, alt21, v21,auxdata,zeta21,lat21,lon21,alpha21,eta21,1.*ones(length(alt21),1), mFuel21,mFuel21(1),mFuel21(end), 1, 0);
+[altdot21,xidot21,phidot21,gammadot21,a21,zetadot21, q21, M21, Fd21, rho021,L21,Fueldt21,T21,Isp21,q121,flapdeflection21,heating_rate21,CG21,T121,P121,M121,P021,T021,P_1_tip21,T_1_tip21,rho_1_tip21,M_1_tip21,v_1_tip21,heating_rate_LE21] = SPARTANDynamics(gamma21, alt21, v21,auxdata,zeta21,lat21,lon21,alpha21,eta21,1.*ones(length(alt21),1), mFuel21,mFuel21(1),mFuel21(end), 1, 0);
 
-[~,~,~,~,~,~, q22, M22, Fd22, rho022,L22,Fueldt22,T22,Isp22,q122,flapdeflection22,heating_rate22,CG22,T122,P122,M122,P022,T022,P_1_tip22,T_1_tip22,rho_1_tip22,M_1_tip22,v_1_tip22] = SPARTANDynamics(gamma22, alt22, v22,auxdata,zeta22,lat22,lon22,alpha22,eta22,throttle22, mFuel22,0,0, 0, 0);
+[~,~,~,~,~,~, q22, M22, Fd22, rho022,L22,Fueldt22,T22,Isp22,q122,flapdeflection22,heating_rate22,CG22,T122,P122,M122,P022,T022,P_1_tip22,T_1_tip22,rho_1_tip22,M_1_tip22,v_1_tip22,heating_rate_LE22] = SPARTANDynamics(gamma22, alt22, v22,auxdata,zeta22,lat22,lon22,alpha22,eta22,throttle22, mFuel22,0,0, 0, 0);
 
 %% Modify throttle for return 
 
@@ -1115,7 +1115,7 @@ Vehicle = auxdata.Vehicle;
 Atmosphere = auxdata.Atmosphere;
 
 % [dz1,q1,xi1,vec_angle1,T1,D1,dm1] = FirstStageDynamics(output{j}.result.solution.phase(1).state',output{j}.result.solution.phase(1).control',output{j}.result.solution.phase(1).time',phase,interp,Throttle,Vehicle,Atmosphere,auxdata); % Pass primal variables into dynamics simulator
-[dz1,q1,xi1,vec_angle1,T121,D1,dm1,M1,rho01,P01,T01,P_1_tip1,T_1_tip1,rho_1_tip1,M_1_tip1,v_1_tip1,heating_rate1] = FirstStageDynamics(output{j}.result.solution.phase(1).state',output{j}.result.solution.phase(1).control',output{j}.result.solution.phase(1).time',phase,interp,Vehicle,Atmosphere,auxdata); % Pass primal variables into dynamics simulator
+[dz1,q1,xi1,vec_angle1,T121,D1,dm1,M1,rho01,P01,T01,P_1_tip1,T_1_tip1,rho_1_tip1,M_1_tip1,v_1_tip1,heating_rate1,heating_rate_LE1] = FirstStageDynamics(output{j}.result.solution.phase(1).state',output{j}.result.solution.phase(1).control',output{j}.result.solution.phase(1).time',phase,interp,Vehicle,Atmosphere,auxdata); % Pass primal variables into dynamics simulator
 
 
  figure(111)
@@ -1203,8 +1203,8 @@ movefile(strcat('FirstStage',namelist{j},'.png'),sprintf('../ArchivedResults/%s'
 
 %%
 
-FlowProps = [[time1'; time21; time22] [alt1'; alt21; alt22] [M1'; M21;M22] [T01';T021;T022] [P01';P021;P022] [rho01';rho021;rho022]  [M_1_tip1';M_1_tip21';M_1_tip22'] [T_1_tip1';T_1_tip21';T_1_tip22'] [P_1_tip1';P_1_tip21';P_1_tip22'] [rho_1_tip1';rho_1_tip21';rho_1_tip22'] [v_1_tip1';v_1_tip21';v_1_tip22'] [heating_rate1';heating_rate21;heating_rate22]  [ones(length(alt1),1);2*ones(length(alt21),1);3*ones(length(alt22),1)]];
-dlmwrite(strcat('FlowProps',namelist{j}),['time (s) ' 'altitude (m) ' 'Mach ' 'Incoming Air Temp (K)' 'Incoming Air Pressure (Pa)' 'Incoming Air density (kg/m^3)' 'Mach no. After Normal Shock' 'Temperature After Normal Shock (K)'  'Pressure After Normal Shock (Pa)' 'Density After Normal Shock (kg/m^3)' 'Velocity After Normal Shock (m/s)' 'heating rate (w/m^2' ' Phase (first-second-return)'],'');   
+FlowProps = [[time1'; time21; time22] [alt1'; alt21; alt22] [M1'; M21;M22] [T01';T021;T022] [P01';P021;P022] [rho01';rho021;rho022]  [M_1_tip1';M_1_tip21';M_1_tip22'] [T_1_tip1';T_1_tip21';T_1_tip22'] [P_1_tip1';P_1_tip21';P_1_tip22'] [rho_1_tip1';rho_1_tip21';rho_1_tip22'] [v_1_tip1';v_1_tip21';v_1_tip22'] [heating_rate1';heating_rate21;heating_rate22] [heating_rate_LE1';heating_rate_LE21;heating_rate_LE22]  [ones(length(alt1),1);2*ones(length(alt21),1);3*ones(length(alt22),1)]];
+dlmwrite(strcat('FlowProps',namelist{j}),['time (s) ' 'altitude (m) ' 'Mach ' 'Incoming Air Temp (K)' 'Incoming Air Pressure (Pa)' 'Incoming Air density (kg/m^3)' 'Mach no. After Normal Shock' 'Temperature After Normal Shock (K)'  'Pressure After Normal Shock (Pa)' 'Density After Normal Shock (kg/m^3)' 'Velocity After Normal Shock (m/s)' 'heating rate (w/m^2)' 'heating rate LE (w/m^2)' ' Phase (first-second-return)'],'');   
 dlmwrite(strcat('FlowProps',namelist{j}),FlowProps,'-append','delimiter',' ');
 movefile(strcat('FlowProps',namelist{j}),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 

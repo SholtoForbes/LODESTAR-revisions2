@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M0, D, rho0,L,Fueldt,T,Isp,q1,flap_deflection,heating_rate,CG,T1,P1,M1,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip] = SPARTANDynamics(gamma, alt, v,auxdata,zeta,phi,xi,alpha,eta,throttle,mFuel,mFuelinit,mFuelend,ThirdStage,forwardflag)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M0, D, rho0,L,Fueldt,T,Isp,q1,flap_deflection,heating_rate_stag,CG,T1,P1,M1,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip,heating_rate_LE] = SPARTANDynamics(gamma, alt, v,auxdata,zeta,phi,xi,alpha,eta,throttle,mFuel,mFuelinit,mFuelend,ThirdStage,forwardflag)
 %===================================================
 %
 % SPARTAN DYNAMICS SIMULATION
@@ -86,6 +86,7 @@ Proportion_fulltocyl  = (mFuel(index_overcyl)-(auxdata.Stage2.mFuel-mFuel_cyltan
 
 % Calculate CG variation
 CG(index_overcyl) = Proportion_fulltocyl*CG_withFuel_withThirdStage + (1-Proportion_fulltocyl)*CG_cyltanksEmpty_withThirdStage;
+
 
 % Calculate Cd
 Cd(index_overcyl) = Proportion_fulltocyl.*auxdata.interp.Cd_spline_EngineOn.fullFuel(mach(index_overcyl),...
@@ -247,14 +248,32 @@ v_1_tip = M_1_tip.*c_1_tip;
 
 %using hot wall correction
 
-kappa = 1.83e-4; % sutton-graves, from nasa lecture
-Rn = 0.005; %effective nose radius (m) 
+kappa = 1.83e-4; % sutton-graves, from nDirkx
+Rn = 0.05; %effective nose radius (m) 
 
 % heating_rate = kappa*sqrt(rho0./Rn).*v.^3; %W/m^2
 
-heating_rate = kappa*sqrt(rho_1_tip./Rn).*v_1_tip.^3; %W/m^2
+% heating_rate_stag = kappa*sqrt(rho_1_tip./Rn).*v_1_tip.^3; %W/m^2
+heating_rate_stag = kappa*sqrt(rho0./Rn).*v.^3; %W/m^2
+% heating_rate_stag = heating_rate_stag';
 
-heating_rate = heating_rate';
+
+% Heat Transfer at Wing Leading Edge
+sweep_angle = 72.9; % deg
+
+% Laminar
+x_l = 5.72; %m, half way along wing, running variable, not sure if this is correct
+k_FP = 2.53e-5*cos(deg2rad(sweep_angle)).^0.5*sin(deg2rad(sweep_angle))*x_l.^-0.5; % Assumes cold wall
+
+heating_rate_FP = k_FP*(rho_1_tip./Rn).^0.5.*v_1_tip.^3.2; % laminar powers
+
+heating_rate_FP = heating_rate_FP';
+
+R_wing = 0.0015; % tip radius of wing
+heating_rate_stag_wing = kappa*sqrt(rho_1_tip./R_wing).*v_1_tip.^3; %W/m^2
+heating_rate_stag_wing = heating_rate_stag_wing';
+
+heating_rate_LE = (0.5*heating_rate_stag_wing*cos(deg2rad(sweep_angle)).^2 + heating_rate_FP*sin(deg2rad(sweep_angle)).^2) ;
 
 % =========================================================================
 end

@@ -1,4 +1,4 @@
-function [dz,q,xi,vec_angle,T,D,dm,M0,rho0,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip,heating_rate ] = FirstStageDynamics(z,u,t,phase,interp,Vehicle,Atmosphere,auxdata)
+function [dz,q,xi,vec_angle,T,D,dm,M0,rho0,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip,heating_rate_stag,heating_rate_LE ] = FirstStageDynamics(z,u,t,phase,interp,Vehicle,Atmosphere,auxdata)
 % function [dz,q,phi] = rocketDynamics(z,u,t,phase,scattered)
 %This function determines the dynamics of the system as time derivatives,
 %from input primals. Called by FirstStageDynamics
@@ -206,8 +206,20 @@ Rn = 0.005; %effective nose radius (m)
 
 % heating_rate = kappa*sqrt(rho0./Rn).*v.^3; %W/m^2
 
-heating_rate = kappa*sqrt(rho_1_tip./Rn).*v_1_tip.^3; %W/m^2
+heating_rate_stag = kappa*sqrt(rho_1_tip./Rn).*v_1_tip.^3; %W/m^2
 
+
+% Heat Transfer at Wing Leading Edge
+sweep_angle = 72.9; % deg
+
+% Laminar
+x_l = 5.72; %m, half way along wing, running variable, not sure if this is correct
+k_FP = 2.53e-5.*cos(deg2rad(sweep_angle)).^0.5.*sin(deg2rad(sweep_angle)).*x_l.^-(1/2); % Assumes cold wall
+
+
+heating_rate_FP = k_FP.*sqrt(rho_1_tip./Rn).*v_1_tip.^3;
+
+heating_rate_LE = (0.5*heating_rate_stag.*cos(deg2rad(sweep_angle)).^2.+heating_rate_FP.*sin(deg2rad(sweep_angle)).^2).^(1/2); % NOTE this has a power of a half, which in included in Tauber et al. but i think is omitted in Dirkx (the brackets in Dirkx indicate its probably a type)
 
 
 end

@@ -56,6 +56,7 @@ auxdata.vCdmod = 1;
 auxdata.m3mod = 1;
 auxdata.Isp3mod = 1;
 auxdata.Cd3mod = 1;
+auxdata.m2mod = 1;
 
 addpath('.\Processing\num2words')
 
@@ -1467,6 +1468,7 @@ elseif mode == 9 %
 elseif mode == 10 %
     for i = 1:length(mSPARTAN_vars)  
         setup_variations{i} = setup;
+        setup_variations{i}.auxdata.m2mod = mSPARTAN_vars(i);
         setup_variations{i}.auxdata.Stage2.mStruct = auxdata.Stage2.mStruct*mSPARTAN_vars(i);
         setup_variations{i}.bounds.phase(1).initialstate.lower(3) = setup.bounds.phase(1).initialstate.lower(3) + auxdata.Stage2.mStruct*(mSPARTAN_vars(i)-1);
         setup_variations{i}.bounds.phase(1).initialstate.upper(3) = setup.bounds.phase(1).initialstate.upper(3) + auxdata.Stage2.mStruct*(mSPARTAN_vars(i)-1);
@@ -1583,6 +1585,10 @@ output{j} = output_store{index};
 if mode ~= 1
 clear output_store
 end
+
+% Shut down parallel pool in case some workers have crashed during run
+poolobj = gcp('nocreate');
+delete(poolobj);
 
 end
 
