@@ -38,7 +38,7 @@ clc
 % mode 0: Alternate launch location
 % mode 101: rainbow beach launch
 
-mode = 1000
+mode = 1
 auxdata.mode = mode;
 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -920,8 +920,8 @@ end
 
 
 
-aoaMin21 = 0;  aoaMax21 = 8*pi/180;
-
+% aoaMin21 = 0;  aoaMax21 = 8*pi/180;
+aoaMin21 = 0;  aoaMax21 = 10*pi/180;
 if mode == 0
     bankMin21 = -90*pi/180; bankMax21 =   90*pi/180; 
 else
@@ -949,16 +949,16 @@ end
 
 % Primal Bounds
 bounds.phase(2).state.lower = [Stage2.Bounds.Alt(1), lonMin, latMin2, Stage2.Bounds.v(1), -deg2rad(10), zetaMin21, aoaMin21, bankMin21, Stage2.Bounds.mFuel(1)];
-bounds.phase(2).state.upper = [Stage2.Bounds.Alt(2), lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(15), zetaMax21, aoaMax21, bankMax21, Stage2.Bounds.mFuel(2)];
+bounds.phase(2).state.upper = [Stage2.Bounds.Alt(2), lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(20), zetaMax21, aoaMax21, bankMax21, Stage2.Bounds.mFuel(2)];
 
 % Initial States
 if returnMode == 1
    bounds.phase(2).initialstate.lower = [Stage2.Bounds.Alt(1),lonMin, latMin2, Stage2.Bounds.v(1), Stage2.Bounds.gamma(1), zetaMin21, aoaMin21, 0, Stage2.Initial.mFuel] ;
-bounds.phase(2).initialstate.upper = [Stage2.Bounds.Alt(2),lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(15), zetaMax21, aoaMax21, 0, Stage2.Initial.mFuel];
+bounds.phase(2).initialstate.upper = [Stage2.Bounds.Alt(2),lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(20), zetaMax21, aoaMax21, 0, Stage2.Initial.mFuel];
  
 else
 bounds.phase(2).initialstate.lower = [Stage2.Bounds.Alt(1),lonMin, latMin2, Stage2.Bounds.v(1), Stage2.Bounds.gamma(1), zetaMin21, aoaMin21, bankMin21, Stage2.Initial.mFuel] ;
-bounds.phase(2).initialstate.upper = [Stage2.Bounds.Alt(2),lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(15), zetaMax21, aoaMax21, bankMax21, Stage2.Initial.mFuel];
+bounds.phase(2).initialstate.upper = [Stage2.Bounds.Alt(2),lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(20), zetaMax21, aoaMax21, bankMax21, Stage2.Initial.mFuel];
 end
 
 % bounds.phase(2).initialstate.lower = [Stage2.Bounds.Alt(1),lon0, lat0, 1500, Stage2.Bounds.gamma(1), Stage2.Bounds.zeta(1), aoaMin21, bankMin21, Stage2.Initial.mFuel] ;
@@ -1030,7 +1030,7 @@ guess.phase(2).state(:,6)   = Stage2.Guess.zeta.';
 end
 
 guess.phase(2).state(:,7)   = [2*pi/180; 5*pi/180];
-guess.phase(2).state(:,8)   = [deg2rad(10);deg2rad(10)];
+guess.phase(2).state(:,8)   = [deg2rad(0);deg2rad(10)];
 guess.phase(2).state(:,9) 	= [Stage2.Initial.mFuel; 100];
 
 guess.phase(2).control      = [[0;0],[0;0]];
@@ -1158,7 +1158,8 @@ else
 zetaMin3 = deg2rad(80); zetaMax3 =  deg2rad(120);
 end
 
-aoaMin3 = 0;  aoaMax3= deg2rad(20);
+% aoaMin3 = 0;  aoaMax3= deg2rad(20);
+ aoaMin3 = 0;  aoaMax3= deg2rad(10);
 aoadotMin3 = -deg2rad(1);
 aoadotMax3 = deg2rad(1);
 

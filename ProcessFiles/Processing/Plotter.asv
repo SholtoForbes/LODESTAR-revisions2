@@ -1209,13 +1209,13 @@ StInterp_shroud = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),Stant
 StInterp_wing = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,6));
 StInterp_tail = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,7));
 
-St_forebody = StInterp_forebody([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
-St_shroud = StInterp_shroud([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
-St_wing = StInterp_wing([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
-St_tail = StInterp_tail([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
+St_forebody = StInterp_forebody([M1'; M21;M22],[alpha1';alpha21;alpha22],[alt1'; alt21; alt22]);
+St_shroud = StInterp_shroud([M1'; M21;M22],[alpha1';alpha21;alpha22],[alt1'; alt21; alt22]);
+St_wing = StInterp_wing([M1'; M21;M22],[alpha1';alpha21;alpha22],[alt1'; alt21; alt22]);
+St_tail = StInterp_tail([M1'; M21;M22],[alpha1';alpha21;alpha22],[alt1'; alt21; alt22]);
 
 FlowProps = [[time1'; time21; time22] [alt1'; alt21; alt22] [M1'; M21;M22] [T01';T021;T022] [P01';P021;P022] [rho01';rho021;rho022]  [M_1_tip1';M_1_tip21';M_1_tip22'] [T_1_tip1';T_1_tip21';T_1_tip22'] [P_1_tip1';P_1_tip21';P_1_tip22'] [rho_1_tip1';rho_1_tip21';rho_1_tip22'] [v_1_tip1';v_1_tip21';v_1_tip22'] [heating_rate1';heating_rate21;heating_rate22] [heating_rate_LE1';heating_rate_LE21;heating_rate_LE22]  [ones(length(alt1),1);2*ones(length(alt21),1);3*ones(length(alt22),1)] St_forebody St_wing St_shroud St_tail];
-dlmwrite(strcat('FlowProps',namelist{j}),['time(s) ' 'altitude(m) ' 'Mach ' 'IncomingAirTemp(K)' ' IncomingAirPressure(Pa)' ' IncomingAirdensity(kg/m^3)' ' Machno.AfterNormalShock' ' TemperatureAfterNormalShock(K)'  ' PressureAfterNormalShock(Pa)' ' DensityAfterNormalShock(kg/m^3)' ' VelocityAfterNormalShock(m/s)' ' heatingrate(w/m^2)' ' heatingrateLE(w/m^2)' ' Phase(first-second-return)'  ' St_forebody' ' St_wing' ' St_shroud' ' St_tail'],'');   
+dlmwrite(strcat('FlowProps',namelist{j}),['time (s) ' 'altitude (m) ' 'Mach ' 'Incoming Air Temp (K)' 'Incoming Air Pressure (Pa)' 'Incoming Air density (kg/m^3)' 'Mach no. After Normal Shock' 'Temperature After Normal Shock (K)'  'Pressure After Normal Shock (Pa)' 'Density After Normal Shock (kg/m^3)' 'Velocity After Normal Shock (m/s)' 'heating rate (w/m^2)' 'heating rate LE (w/m^2)' ' Phase (first-second-return)'  ' St_forebody' St_wing St_shroud St_tail],'');   
 dlmwrite(strcat('FlowProps',namelist{j}),FlowProps,'-append','delimiter',' ');
 movefile(strcat('FlowProps',namelist{j}),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 

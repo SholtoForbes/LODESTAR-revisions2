@@ -183,6 +183,7 @@ CL  = Lift_interp(M ,rad2deg(Alpha ),alt);
 CN  = CN_interp(M ,rad2deg(Alpha ),alt);
 cP  = CP_interp(M ,rad2deg(Alpha ),alt);
 
+
 if mode == 1000
 
 CD  = CD + CD*auxdata.Cn3mod.*sin(Alpha)+ CD*auxdata.Ca3mod.*cos(Alpha);
