@@ -1,4 +1,4 @@
-function [AltF_actual, vF, Alt, v, t, mpayload, Alpha, m,q,gamma,D,zeta,phi, inc,T,CL,L,inc_diff,xi,dvtot,m4,vexo,hs,Kn] = ThirdStageSim(alt0,gamma0,v0, phi0, xi0, zeta0, m0, auxdata)
+function [AltF_actual, vF, Alt, v, t, mpayload, Alpha, m,q,gamma,D,zeta,phi, inc,T,CL,L,inc_diff,xi,dvtot,m4,vexo,hs,] = ThirdStageSim(alt0,gamma0,v0, phi0, xi0, zeta0, m0, auxdata)
 % Function for simulating the Third Stage Rocket Trajectory
 % Created by Sholto Forbes-Spyratos
 
@@ -71,14 +71,10 @@ while gamma(i) >= 0 && Alt(end) > 20000 && Alt(end)
         c(i) = ppval(auxdata.interp.c_spline,  Alt(i)); % Calculate speed of sound using atmospheric data
         rho(i) = ppval(auxdata.interp.rho_spline, Alt(i)); % Calculate density using atmospheric data
         q(i) = 1/2*rho(i)*v(i)^2;
-        P0(i) = ppval(auxdata.interp.P0_spline, Alt(i)); % Pressure (Pa), in atmosphere
-        T0(i) = ppval(auxdata.interp.T0_spline, Alt(i)); % Temperatue (K), in atmosphere
     else
         c(i) = ppval(auxdata.interp.c_spline, 85000);
         rho(i) = 0;
         q(i) = 0;
-        P0(i) = ppval(auxdata.interp.P0_spline, 85000); % Pressure (Pa), in atmosphere
-        T0(i) = ppval(auxdata.interp.T0_spline, 85000); % Temperatue (K), in atmosphere
         exocond = true;
     end
     

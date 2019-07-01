@@ -1,0 +1,16 @@
+C-C cone
+Area 5.18466m^2
+thickness = 10mm
+density = 1730 (Boeing/Rohr T-300)
+
+mass = 89.69kg
+
+Tungsten tip
+
+Area = 0.0260839m^2
+Thickness = 20mm
+Density = 19250
+
+mass = 10.042
+
+

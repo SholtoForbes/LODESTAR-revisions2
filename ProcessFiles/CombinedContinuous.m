@@ -116,15 +116,15 @@ Alphadot  = input.phase(4).control(:,1);
 
 auxdata=input.auxdata;
 
-[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, AoA_max3, T3] = ThirdStageDynamics(alt3,gamma3,v3,m3,Alpha3,time3,auxdata, Alphadot, phi3, zeta3);
+[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, T3] = ThirdStageDynamics(alt3,gamma3,v3,m3,Alpha3,time3,auxdata, Alphadot, phi3, zeta3);
 
 phaseout(4).dynamics  = [rdot3, vdot3, gammadot3, -mdot3*ones(length(rdot3),1), Alphadot, phidot3, zetadot3];
 
-Alpha_constraint = Alpha3-AoA_max3;
+% Alpha_constraint = Alpha3-AoA_max3;
 
-phaseout(4).path = [Vec_angle3,Alpha_constraint];
+% phaseout(4).path = [Vec_angle3,Alpha_constraint];
 
-
+phaseout(4).path = [Vec_angle3];
 end
 
 %======================================================
