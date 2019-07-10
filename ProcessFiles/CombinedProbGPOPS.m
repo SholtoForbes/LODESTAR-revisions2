@@ -40,10 +40,10 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 2
+mode = 90
 auxdata.mode = mode;
 
-returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
+returnMode = 0% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 auxdata.returnMode = returnMode;
 
 
@@ -698,7 +698,30 @@ L3grid = zeros(length(Mlist3),length(AoAlist3),length(altlist3));
 for i = 1:length(Mlist3)
     for j = 1:length(AoAlist3)
         for k = 1:length(altlist3)
-            L3grid(i,j,k) = L3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
+%             L3grid(i,j,k) = L3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
+        
+            
+            % Rarified flow from Wuilbercq
+            T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
+            P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
+            
+            [Kn_temp, Fq_axial_rarified_temp] = ThirdStageHAViscous(T_temp,P_temp,Mgrid3(i,j,k),deg2rad(AoAgrid3(i,j,k)));
+            
+            Cf_rarified_temp = -Fq_axial_rarified_temp/0.95*sin(deg2rad(AoAgrid3(i,j,k)));
+            
+            
+            PB = Kn_temp/(1+Kn_temp);
+            
+            Cf_cont_temp = L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
+            
+            if Kn_temp > 0.01
+                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.001,0.01]));
+            else
+                Cf_temp = Cf_cont_temp;
+            end
+            
+            L3grid(i,j,k) = L3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + Cf_temp;
+        
         end
     end
 end
@@ -716,7 +739,27 @@ D3grid = zeros(length(Mlist3),length(AoAlist3),length(altlist3));
 for i = 1:length(Mlist3)
     for j = 1:length(AoAlist3)
         for k = 1:length(altlist3)
-            D3grid(i,j,k) = D3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + D3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
+            
+            % Rarified flow from Wuilbercq
+            T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
+            P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
+            
+            [Kn_temp, Fq_axial_rarified_temp] = ThirdStageHAViscous(T_temp,P_temp,Mgrid3(i,j,k),deg2rad(AoAgrid3(i,j,k)));
+            
+            Cf_rarified_temp = Fq_axial_rarified_temp/0.95*cos(deg2rad(AoAgrid3(i,j,k)));
+            
+            
+            PB = Kn_temp/(1+Kn_temp);
+            
+            Cf_cont_temp = D3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
+            
+            if Kn_temp > 0.01
+                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.001,0.01]));
+            else
+                Cf_temp = Cf_cont_temp;
+            end
+            
+            D3grid(i,j,k) = D3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + Cf_temp;
         end
     end
 end

@@ -40,7 +40,7 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 1
+mode = 2
 auxdata.mode = mode;
 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -703,7 +703,7 @@ for i = 1:length(Mlist3)
     end
 end
 
-L3interp = griddedInterpolant(Mgrid3,AoAgrid3,altgrid3,L3grid,'spline','nearest');
+auxdata.interp.L3interp = griddedInterpolant(Mgrid3,AoAgrid3,altgrid3,L3grid,'spline','nearest');
 
 %Drag
 
@@ -716,20 +716,27 @@ D3grid = zeros(length(Mlist3),length(AoAlist3),length(altlist3));
 for i = 1:length(Mlist3)
     for j = 1:length(AoAlist3)
         for k = 1:length(altlist3)
+            
+            T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
+            P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
+            
+            [Kn_temp, Fq_axial_rarified_temp] = ThirdStageHAViscous(T_temp,P_temp,Mgrid3(i,j,k),deg2rad(AoAgrid3(i,j,k)));
+            
+            
             D3grid(i,j,k) = D3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + D3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
         end
     end
 end
 
-D3interp = griddedInterpolant(Mgrid3,AoAgrid3,altgrid3,D3grid,'spline','nearest');
+auxdata.interp.D3interp = griddedInterpolant(Mgrid3,AoAgrid3,altgrid3,D3grid,'spline','nearest');
 
 % Moment
 
 auxdata.Aero3_full = dlmread('ThirdStageAero4.326');
-momentScatteredInterp3_full = scatteredinterpolant(auxdata.Aero3_full(:,1),auxdata.Aero3_full(:,2),auxdata.Aero3_full(:,3));
+momentScatteredInterp3_full = scatteredInterpolant(auxdata.Aero3_full(:,1),auxdata.Aero3_full(:,2),auxdata.Aero3_full(:,5));
 
 auxdata.Aero3_empty = dlmread('ThirdStageAero4.046');
-momentScatteredInterp3_empty = scatteredinterpolant(auxdata.Aero3_empty(:,1),auxdata.Aero3_empty(:,2),auxdata.Aero3_empty(:,3));
+momentScatteredInterp3_empty = scatteredInterpolant(auxdata.Aero3_empty(:,1),auxdata.Aero3_empty(:,2),auxdata.Aero3_empty(:,5));
 
 
 [Mgrid3_moment,AoAgrid3_moment] = ndgrid(unique(auxdata.Aero3_full(:,1)),unique(auxdata.Aero3_full(:,2)));
@@ -740,12 +747,13 @@ moment3Grid_empty = zeros(length(unique(auxdata.Aero3_full(:,1))),length(unique(
 
 for i = 1:length(unique(auxdata.Aero3_full(:,1)))
     for j = 1:length(unique(auxdata.Aero3_full(:,2)))
-        moment3Grid_full(j,k) = momentScatteredInterp3_full(Mgrid3_moment(j,k),AoAgrid3_moment(j,k));
-        moment3Grid_empty(j,k) = momentScatteredInterp3_empty(Mgrid3_moment(j,k),AoAgrid3_moment(j,k));
+        moment3Grid_full(i,j) = momentScatteredInterp3_full(Mgrid3_moment(i,j),AoAgrid3_moment(i,j));
+        moment3Grid_empty(i,j) = momentScatteredInterp3_empty(Mgrid3_moment(i,j),AoAgrid3_moment(i,j));
     end
 end
 
-momentInterp3_Full = griddedInterpolant(Mgrid3_moment,AoAgrid3_moment
+auxdata.interp.momentInterp3_full = griddedInterpolant(Mgrid3_moment,AoAgrid3_moment,moment3Grid_full);
+auxdata.interp.momentInterp3_empty = griddedInterpolant(Mgrid3_moment,AoAgrid3_moment,moment3Grid_empty);
 
 %Max Aoa (reverse interp with CN)
 % Aero3forMaxAoa = dlmread('ThirdStageAeroCoeffs.txt'); % import aerodynamics with approximated altitudes for max aoa calculations
@@ -1285,9 +1293,11 @@ bounds.phase(4).finalstate.upper = [altMax3, vMax3, gammaMax3, auxdata.Stage3.mT
 bounds.phase(4).control.lower = [aoadotMin3];
 bounds.phase(4).control.upper = [aoadotMax3];
 
-bounds.phase(4).path.lower = [-deg2rad(8), -inf];
-bounds.phase(4).path.upper = [deg2rad(8), 0];
+% bounds.phase(4).path.lower = [-deg2rad(8), -inf];
+% bounds.phase(4).path.upper = [deg2rad(8), 0];
 
+bounds.phase(4).path.lower = [-deg2rad(8)];
+bounds.phase(4).path.upper = [deg2rad(8)];
 
 bounds.eventgroup(4).lower = [zeros(1,7) 90000 0];
 bounds.eventgroup(4).upper = [zeros(1,6) 1000 566000 0];
@@ -1690,11 +1700,11 @@ end
 for i = 1:num_it
 setup_par(i) = setup_variations{j};
 % setup_par(i).nlp.ipoptoptions.maxiterations = 500 + 10*i;
-setup_par(i).guess.phase(2).state(:,1)   = [24000; 25000 + 1000*i]; % vary altitude guess
+setup_par(i).guess.phase(2).state(:,1)   = [24000; 30000 + 2000*i]; % vary altitude guess
 end
 
 parfor i = 1:num_it
-    
+  
 output_temp = gpops2(setup_par(i)); % Run GPOPS-2. Use setup for each parallel iteration.
 % 
 % % Run forward simulation for comparison between runs

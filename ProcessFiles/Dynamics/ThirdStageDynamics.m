@@ -188,7 +188,8 @@ T  = Isp.*mdot.*g - p .*A; % Thrust (N)
 % CN  = CN_interp(M ,rad2deg(Alpha ),alt);
 % cP  = CP_interp(M ,rad2deg(Alpha ),alt);
 
-Kn = ThirdStageHAViscous(T,p,L_ThirdStage);
+
+
 
 CD  = auxdata.interp.D3interp(M ,rad2deg(Alpha ),alt);
 CL  = auxdata.interp.L3interp(M ,rad2deg(Alpha ),alt);

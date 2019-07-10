@@ -101,7 +101,7 @@ while gamma(i) >= 0 && Alt(end) > 20000 && Alt(end)
 %     CD(i) = Drag_interp(M(i),rad2deg(Alpha),Alt(i));
 %     CL(i) = Lift_interp(M(i),rad2deg(Alpha),Alt(i));
 
-Kn(i) = ThirdStageHAViscous(T0(i),P0(i),L_ThirdStage);
+Kn(i) = ThirdStageHAViscous(T0(i),P0(i), M(i),L_ThirdStage);
 
 CD(i)  = auxdata.interp.D3interp(M(i),rad2deg(Alpha),Alt(i));
 CL(i)  = auxdata.interp.L3interp(M(i),rad2deg(Alpha),Alt(i));
