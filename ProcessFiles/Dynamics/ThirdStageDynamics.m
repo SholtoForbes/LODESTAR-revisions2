@@ -1,4 +1,4 @@
-function [rdot,xidot,phidot,gammadot,vdot,zetadot, mdot, Vec_angle, T, L, D, q, Kn] = ThirdStageDynamics(alt,gamma,v,m,Alpha,time,auxdata, Alphadot, phi, zeta)
+function [rdot,xidot,phidot,gammadot,vdot,zetadot, mdot, Vec_angle, T, L, D, q] = ThirdStageDynamics(alt,gamma,v,m,Alpha,time,auxdata, Alphadot, phi, zeta)
 % Function for simulating the Third Stage Rocket Trajectory
 % Created by Sholto Forbes-Spyratos
 mode = auxdata.mode;

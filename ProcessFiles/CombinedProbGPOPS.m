@@ -40,10 +40,10 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 90
+mode = 1
 auxdata.mode = mode;
 
-returnMode = 0% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
+returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 auxdata.returnMode = returnMode;
 
 
@@ -709,13 +709,17 @@ for i = 1:length(Mlist3)
             
             Cf_rarified_temp = -Fq_axial_rarified_temp/0.95*sin(deg2rad(AoAgrid3(i,j,k)));
             
-            
-            PB = Kn_temp/(1+Kn_temp);
+            n=1;
+            k1 = 3/8;
+            k2 = 1/8;
+            X = pi*(k1+k2*log10(Kn_temp));
+            PB = sin(X)^n;
+%             PB = Kn_temp/(1+Kn_temp);
             
             Cf_cont_temp = L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
             
             if Kn_temp > 0.01
-                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.001,0.01]));
+                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.002,0.01]));
             else
                 Cf_temp = Cf_cont_temp;
             end
@@ -748,13 +752,17 @@ for i = 1:length(Mlist3)
             
             Cf_rarified_temp = Fq_axial_rarified_temp/0.95*cos(deg2rad(AoAgrid3(i,j,k)));
             
-            
-            PB = Kn_temp/(1+Kn_temp);
+            n=1;
+            k1 = 3/8;
+            k2 = 1/8;
+            X = pi*(k1+k2*log10(Kn_temp));
+            PB = sin(X)^n;
+%             PB = Kn_temp/(1+Kn_temp);
             
             Cf_cont_temp = D3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
             
             if Kn_temp > 0.01
-                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.001,0.01]));
+                Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.002,0.01]));
             else
                 Cf_temp = Cf_cont_temp;
             end
@@ -1796,9 +1804,9 @@ output_store{i} = output_temp;
 
 end
 
-[min_error,index] = min(error); % Calculate the result which minimises the chosen error function
+% [min_error,index] = min(error); % Calculate the result which minimises the chosen error function
 
-% [max_pl,index] = max(PayloadMass);% Calculate the result which maximises payload mass the chosen error function
+[max_pl,index] = max(PayloadMass);% Calculate the result which maximises payload mass the chosen error function
 
 output{j} = output_store{index};
 

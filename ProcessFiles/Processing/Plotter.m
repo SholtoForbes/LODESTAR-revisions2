@@ -151,7 +151,7 @@ plot3(lon22,lat22,alt22)
 %% Third Stage
 % simulate unpowered third stage trajectory from end point
 
-[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, T3, L3, D3, q3, Kn3] = ThirdStageDynamics(alt3,gamma3,v3,m3,aoa3,time3,auxdata,aoadot3,lat3,zeta3);
+[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, T3, L3, D3, q3] = ThirdStageDynamics(alt3,gamma3,v3,m3,aoa3,time3,auxdata,aoadot3,lat3,zeta3);
 
 figure(3223)
 plot(time3,rad2deg(aoa3))
@@ -168,7 +168,7 @@ for i = 2:length(time3)
     lon3(i) = lon3(i-1) + xidot3(i-1)*(time3(i)-time3(i-1));
 end
 
-[AltF_actual, v3F, altexo, v3exo, timeexo, mpayload, Alpha3, mexo,qexo,gammaexo,Dexo,zetaexo,latexo,incexo,Texo,CLexo,Lexo,incdiffexo,lonexo,dvtot3,m3_4,v3exo_coordchange,hs,Knexo] = ThirdStageSim(alt3(end),gamma3(end),v3(end), lat3(end),lon3(end), zeta3(end), m3(end), auxdata);
+[AltF_actual, v3F, altexo, v3exo, timeexo, mpayload, Alpha3, mexo,qexo,gammaexo,Dexo,zetaexo,latexo,incexo,Texo,CLexo,Lexo,incdiffexo,lonexo,dvtot3,m3_4,v3exo_coordchange,hs] = ThirdStageSim(alt3(end),gamma3(end),v3(end), lat3(end),lon3(end), zeta3(end), m3(end), auxdata);
 
 [~, ~, ~, ~, ~, mpayloadtest] = ThirdStageSim(alt3(end),gamma3(end),v3(end), lat3(end)-0.008,lon3(end), zeta3(end)+0.0005, m3(end), auxdata);
 
@@ -979,8 +979,8 @@ xlabel('Time (s)');
     % Write data to file
     
     
-    dlmwrite(strcat('ThirdStageStates',namelist{j}),['time (s) ' 'altitude (m) ' 'velocity (m/s) ' 'mass (kg) ' 'dynamic pressure (Pa)' 'trajectory angle (rad) ' 'Lift (N)' 'Drag (N)' 'heading angle (rad) ' 'latitude (rad) ' 'angle of attack (rad) ' 'Knudsen no'],'');
-    dlmwrite(strcat('ThirdStageStates',namelist{j}),[[time3; time3(end)+timeexo'], [alt3; altexo'], [v3; v3exo'], [m3; mexo'; mexo(end)],[q3; qexo'; qexo(end)] ,[gamma3; gammaexo'],[L3; Lexo'; Lexo(end)],[D3; Dexo'; Dexo(end)] ,[zeta3; zetaexo'], [lat3; latexo'], [aoa3; zeros(length(timeexo),1)] , [Kn3; Knexo'; Knexo(end)]],'-append','delimiter',' ')
+    dlmwrite(strcat('ThirdStageStates',namelist{j}),['time (s) ' 'altitude (m) ' 'velocity (m/s) ' 'mass (kg) ' 'dynamic pressure (Pa)' 'trajectory angle (rad) ' 'Lift (N)' 'Drag (N)' 'heading angle (rad) ' 'latitude (rad) ' 'angle of attack (rad) '],'');
+    dlmwrite(strcat('ThirdStageStates',namelist{j}),[[time3; time3(end)+timeexo'], [alt3; altexo'], [v3; v3exo'], [m3; mexo'; mexo(end)],[q3; qexo'; qexo(end)] ,[gamma3; gammaexo'],[L3; Lexo'; Lexo(end)],[D3; Dexo'; Dexo(end)] ,[zeta3; zetaexo'], [lat3; latexo'], [aoa3; zeros(length(timeexo),1)]],'-append','delimiter',' ')
 movefile(strcat('ThirdStageStates',namelist{j}),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 
 

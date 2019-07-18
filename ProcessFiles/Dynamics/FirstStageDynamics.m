@@ -48,14 +48,14 @@ g0 = 9.81;
 
 if alt>=0 & strcmp(phase,'postpitch')
 rho0 = ppval(interp.rho_spline,alt); % Calculate density using atmospheric data
-P0 = ppval(interp.P0_spline, alt);
+% P0 = ppval(interp.P0_spline, alt);
 speedOfSound = ppval(interp.c_spline,alt); % Calculate speed of sound using atmospheric data
 T0 = ppval(interp.T0_spline, alt); 
 P0 = ppval(interp.P0_spline, alt);
 
 else
     rho0 = ppval(interp.rho_spline,0); % Calculate density using atmospheric data
-P0 = ppval(interp.P0_spline, 0);
+% P0 = ppval(interp.P0_spline, 0);
 speedOfSound = ppval(interp.c_spline,0); % Calculate speed of sound using atmospheric data
 T0 = ppval(interp.T0_spline, 0); 
 P0 = ppval(interp.P0_spline, 0);
