@@ -2664,7 +2664,7 @@ aoadot3nom       = output{ceil(length(output)/2)}.result.solution.phase(4).contr
 time3nom = output{ceil(length(output)/2)}.result.solution.phase(4).time;
    
     
-[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, AoA_max3, T3, L3, D3, q3nom] = ThirdStageDynamics(alt3nom,gamma3nom,v3nom,m3nom,aoa3nom,time3nom,auxdata,aoadot3nom,lat3nom,zeta3nom);
+[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, T3, L3, D3, q3nom] = ThirdStageDynamics(alt3nom,gamma3nom,v3nom,m3nom,aoa3nom,time3nom,auxdata,aoadot3nom,lat3nom,zeta3nom);
 
 [AltF_actual, v3F, altexonom, v3exo, timeexonom, mpayload, Alpha3, mexo,qexo,gammaexo,Dexo,zetaexo,latexo,incexo,Texo,CLexo,Lexo,incdiffexo,lonexo,dvtot3,m3_4] = ThirdStageSim(alt3nom(end),gamma3nom(end),v3nom(end), lat3nom(end),0, zeta3nom(end), m3nom(end), auxdata);
 
@@ -2768,7 +2768,7 @@ aoadot3       = output{j}.result.solution.phase(4).control(:,1);
 time3 = output{j}.result.solution.phase(4).time;
 
         
-[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, AoA_max3, T3, L3, D3, q3] = ThirdStageDynamics(alt3,gamma3,v3,m3,aoa3,time3,auxdata,aoadot3,lat3,zeta3);
+[rdot3,xidot3,phidot3,gammadot3,vdot3,zetadot3, mdot3, Vec_angle3, T3, L3, D3, q3] = ThirdStageDynamics(alt3,gamma3,v3,m3,aoa3,time3,auxdata,aoadot3,lat3,zeta3);
 
 lon3 = [];
 lon3(1) = lon21(end);

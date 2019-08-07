@@ -48,7 +48,7 @@ Isp = Isp_nozzlefront; %
     throttle(q1<20000) = throttle(q1<20000).*gaussmf(q1(q1<20000),[100,20000]); % rapidly reduce throttle to 0 after passing the lower limit of 20kPa dynamic pressure. This dynamic pressure is after the conical shock.
     throttle(M0<5.0) =   throttle(M0<5.0).*gaussmf(M0(M0<5.0),[.01,5]); % remove throttle points below operable range on return flight
  else
-     throttle(q1<20000) = throttle(q1<20000).*gaussmf(q1(q1<20000),[100,20000]);
+     throttle(q1<20000) = throttle(q1<20000).*gaussmf(q1(q1<20000),[200,20000]);
 end
 
 Fueldt = Fueldt_max.*throttle; %
@@ -205,7 +205,7 @@ L = 0.5*Cl.*A.*rho0.*v.^2;
 
 
 
-[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,eta,auxdata.delta);
+[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,eta,auxdata.delta,auxdata);
 
 % Aero Data =============================================================
 

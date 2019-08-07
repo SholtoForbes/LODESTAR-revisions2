@@ -224,8 +224,7 @@ Cm_empty = auxdata.interp.momentInterp3_empty(M ,rad2deg(Alpha ));
 
 Cm = (CG-CG_Empty)./(CG_Full-CG_Empty).*Cm_full + (CG_Full - CG)./(CG_Full-CG_Empty).*Cm_empty;
 
-
-Vec_angle  = -asin(Cm.*L_ThirdStage_ref.*A.*q ./(T.*(L_ThirdStage_ref-CG-1.5)));
+Vec_angle  = asin(Cm.*L_ThirdStage_ref.*A.*q ./(T.*(L_ThirdStage-CG-1.5))); % Positive down
 
 if any(not(isreal(Vec_angle)))
 Vec_angle(not(isreal(Vec_angle)))  = deg2rad(80); % This stops the vector angle going imaginary
@@ -235,7 +234,7 @@ end
 %% Calculate Dynamics
 % [rdot,xidot,phidot,gammadot,vdot,zetadot] = RotCoordsRocket(alt+auxdata.Re,0,phi,gamma,v,zeta,L,D,T,m,Alpha,Vec_angle);
 % %Also change this in third stage sim
-[rdot,xidot,phidot,gammadot,vdot,zetadot] = RotCoordsRocket(alt,zeros(length(alt),1),phi,gamma,v,zeta,L,D,T,m,Alpha,Vec_angle);
+[rdot,xidot,phidot,gammadot,vdot,zetadot] = RotCoordsRocket(alt,zeros(length(alt),1),phi,gamma,v,zeta,L,D,T,m,Alpha,Vec_angle,auxdata);
 
 end
 

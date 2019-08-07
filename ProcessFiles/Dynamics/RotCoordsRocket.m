@@ -1,4 +1,4 @@
-function [rdot,xidot,phidot,gammadot,vdot,zetadot] = RotCoordsRocket(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,Vec_angle)
+function [rdot,xidot,phidot,gammadot,vdot,zetadot] = RotCoordsRocket(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,Vec_angle,auxdata)
 % % Determination of motion in rotating coordinates
 % %xi  Longitude (rad)
 % %phi  Latitude (rad)
@@ -30,11 +30,12 @@ Re = geocradius(rad2deg(phi)); %Calculate
 
 r = alt+Re;
 
-
-phi_geod = geoc2geod(rad2deg(phi), r); % calculate geodetic latitude
-
-[gn, gt] = gravitywgs84( alt, phi_geod, rad2deg(xi), 'Exact', 'Warning'); % calculate normal and tangential components of gravity
-% gn = gravitywgs84( alt, phi_geod, 'TaylorSeries', 'None'); % calculate normal and tangential components of gravity
+gn = auxdata.interp.gn_interp(rad2deg(phi), alt);
+gt = auxdata.interp.gt_interp(rad2deg(phi), alt);
+% phi_geod = geoc2geod(rad2deg(phi), r); % calculate geodetic latitude
+% 
+% [gn, gt] = gravitywgs84( alt, phi_geod, rad2deg(xi), 'Exact', 'Warning'); % calculate normal and tangential components of gravity
+% % gn = gravitywgs84( alt, phi_geod, 'TaylorSeries', 'None'); % calculate normal and tangential components of gravity
 
 % gt = 0;
 

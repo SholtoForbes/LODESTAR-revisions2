@@ -86,12 +86,13 @@ M0 = v./speedOfSound;
 % interpolate coefficients
 % Cd = interp.DragGridded(mach,rad2deg(alpha)) ;
 % Cl = interp.LiftGridded(mach,rad2deg(alpha)) ;
-Cd = interp.DragGridded(M0,rad2deg(alpha)) + interp.Cd_gridded_Visc1(M0,rad2deg(alpha),alt);
-Cl = interp.LiftGridded(M0,rad2deg(alpha)) + interp.Cl_gridded_Visc1(M0,rad2deg(alpha),alt);
+Cd = interp.DragGridded(M0',rad2deg(alpha')) + interp.Cd_gridded_Visc1(M0',rad2deg(alpha'),alt');
+Cl = interp.LiftGridded(M0',rad2deg(alpha')) + interp.Cl_gridded_Visc1(M0',rad2deg(alpha'),alt');
+Cd = Cd';
+Cl = Cl';
 
-
-Cm = (1-(auxdata.Vehicle.mFuel - (m - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel).*interp.MomentGriddedFull(M0,rad2deg(alpha)) + (auxdata.Vehicle.mFuel - (m - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel.*interp.MomentGriddedEmpty(M0,rad2deg(alpha));
-
+Cm = (1-(auxdata.Vehicle.mFuel - (m' - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel).*interp.MomentGriddedFull(M0',rad2deg(alpha')) + (auxdata.Vehicle.mFuel - (m' - auxdata.m1FuelDepleted))./auxdata.Vehicle.mFuel.*interp.MomentGriddedEmpty(M0',rad2deg(alpha'));
+Cm = Cm';
 
 if mode == 1000
     % Modify coefficients by modifiers, using sigma mf to smoothly
@@ -148,7 +149,7 @@ xi = zeros(1,length(alt));
 
 
 % [dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(h+rEarth,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase);
-[dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase,vec_angle);
+[dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(alt,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase,vec_angle,auxdata);
 
 
 
@@ -220,6 +221,5 @@ k_FP = 2.53e-5.*cos(deg2rad(sweep_angle)).^0.5.*sin(deg2rad(sweep_angle)).*x_l.^
 heating_rate_FP = k_FP.*sqrt(rho_1_tip./Rn).*v_1_tip.^3;
 
 heating_rate_LE = (0.5*heating_rate_stag.*cos(deg2rad(sweep_angle)).^2.+heating_rate_FP.*sin(deg2rad(sweep_angle)).^2).^(1/2); % NOTE this has a power of a half, which in included in Tauber et al. but i think is omitted in Dirkx (the brackets in Dirkx indicate its probably a type)
-
 
 end

@@ -16,8 +16,8 @@ A = 0.95; % diameter of 1.1m
 L_ThirdStage = 8.66; % Actual Length
 
 %% Define starting condtions
-dt = 1; % Define the time-step. This effects the run time of the optimisation significantly
-% dt = 2;
+% dt = 1; % Define the time-step. This effects the run time of the optimisation significantly
+dt = 2;
 
 i=1;
 
@@ -114,7 +114,7 @@ CL(i)  = auxdata.interp.L3interp(M(i),rad2deg(Alpha),Alt(i));
    
 %     [rdot(i),xidot(i),phidot(i),gammadot(i),vdot(i),zetadot(i)] = RotCoordsRocket(r(i),xi(i),phi(i),gamma(i),v(i),zeta(i),L(i),D(i),T,m(i),Alpha,0);
 %    
-[rdot(i),xidot(i),phidot(i),gammadot(i),vdot(i),zetadot(i)] = RotCoordsRocket(Alt(i),xi(i),phi(i),gamma(i),v(i),zeta(i),L(i),D(i),T,m(i),Alpha,0);
+[rdot(i),xidot(i),phidot(i),gammadot(i),vdot(i),zetadot(i)] = RotCoordsRocket(Alt(i),xi(i),phi(i),gamma(i),v(i),zeta(i),L(i),D(i),T,m(i),Alpha,0,auxdata);
    
     %% Perform Forward Integration
     if i == 1 

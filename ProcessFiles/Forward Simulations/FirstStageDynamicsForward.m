@@ -82,7 +82,7 @@ end
 xi = 0; 
 
 % [dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(h+rEarth,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase);
-[dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(h,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase,vec_angle);
+[dr,dxi,dphi,dgamma,dv,dzeta] = RotCoordsFirst(h,xi,phi,gamma,v,zeta,L,D,T,m,alpha,phase,vec_angle,auxdata);
 
 % dzeta
 if isnan(dgamma)

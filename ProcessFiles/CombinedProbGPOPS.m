@@ -21,7 +21,7 @@ clc
 % fully turbulent
 
 % mode 6: First Stage mass
-% mode 7: Third Stage Drag Variation
+% mode 7: Third Stage Drag Variation %%% XXX Change to lift
 % mode 8: Third Stage Mass Variation
 % mode 9: Third Stage Isp variation
 % mode 10: SPARTAN mass 
@@ -40,14 +40,16 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 1
-auxdata.mode = mode;
+% mode = 8
+% 
+% 
+% returnMode = 0% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 
-returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
-auxdata.returnMode = returnMode;
+for mode = [5 9 10 11]
+returnMode = 1%
 
-
-
+        auxdata.mode = mode;
+        auxdata.returnMode = returnMode;
 
 %%
 
@@ -329,6 +331,38 @@ addpath('../CG15.16') % Add folder containing aerodynamic datasets
 % Aerodynamics File Path
 Aero1_Full = dlmread('FirstStageAero23.365');
 Aero1_Empty = dlmread('FirstStageAero16.8631');
+
+%% Gravity
+% create gravity interpolators to speed up calculations
+gn_mat = [];
+gt_mat = [];
+phi_mat = [];
+alt_mat = [];
+i = 1;
+
+
+for phi_temp = -180:1:180
+    j = 1;
+    for alt_temp = 0:1000:200000
+        Re = geocradius(phi_temp); %Calculate earth radius
+        phi_geod_temp = geoc2geod(phi_temp, alt_temp+Re); % calculate geodetic latitude
+        
+        xi = 0;
+        [gn_mat(i,j), gt_mat(i,j)] = gravitywgs84( alt_temp, phi_geod_temp, xi, 'Exact', 'Warning'); % calculate normal and tangential components of gravity
+
+        phi_mat(i,j) = phi_temp;
+        alt_mat(i,j) = alt_temp;
+        j = j + 1;
+    end
+    i = i+1;
+end
+gn_interp = griddedInterpolant(phi_mat,alt_mat,gn_mat,'spline');
+auxdata.interp.gn_interp = gn_interp;
+
+gt_interp = griddedInterpolant(phi_mat,alt_mat,gt_mat,'spline');
+auxdata.interp.gt_interp = gt_interp;
+
+
 
 %% Vehicle 
 
@@ -1465,14 +1499,14 @@ if mode == 99
         setup_variations{j} = setup;
         if p(j,1) == 1
                 
-                setup_variations{j}.bounds.phase(1).path.upper = q_vars(end-1);
-                setup_variations{j}.bounds.phase(2).path.upper = q_vars(end-1);
-                setup_variations{j}.bounds.phase(3).path.upper = q_vars(end-1);
+                setup_variations{j}.bounds.phase(1).path.upper(1) = q_vars(end-1);
+                setup_variations{j}.bounds.phase(2).path.upper(1) = q_vars(end-1);
+                setup_variations{j}.bounds.phase(3).path.upper(1) = q_vars(end-1);
         elseif p(j,1) == -1
  
-                setup_variations{j}.bounds.phase(1).path.upper = q_vars(2);
-                setup_variations{j}.bounds.phase(2).path.upper = q_vars(2);
-                setup_variations{j}.bounds.phase(3).path.upper = q_vars(2);
+                setup_variations{j}.bounds.phase(1).path.upper(1) = q_vars(2);
+                setup_variations{j}.bounds.phase(2).path.upper(1) = q_vars(2);
+                setup_variations{j}.bounds.phase(3).path.upper(1) = q_vars(2);
         end
         if p(j,2) == 1
           
@@ -1557,9 +1591,9 @@ elseif mode == 90
 elseif mode == 2
     for i = 1:length(q_vars)  
         setup_variations{i} = setup;
-        setup_variations{i}.bounds.phase(1).path.upper = q_vars(i);
-        setup_variations{i}.bounds.phase(2).path.upper = q_vars(i);
-        setup_variations{i}.bounds.phase(3).path.upper = q_vars(i);
+        setup_variations{i}.bounds.phase(1).path.upper(1) = q_vars(i);
+        setup_variations{i}.bounds.phase(2).path.upper(1) = q_vars(i);
+        setup_variations{i}.bounds.phase(3).path.upper(1) = q_vars(i);
     end
 %     setup_variations{2}.guess.phase(2).state(:,4) = [1500;2800]; % modify guess for badly converging solution
 elseif mode == 3
@@ -1829,8 +1863,8 @@ Plotter(output,auxdata,auxdata.mode,auxdata.returnMode,auxdata.namelist,M_englis
 
 
 
-
-
+clear all
+end
 
 
 %% =========================================================================
