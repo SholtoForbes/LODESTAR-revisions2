@@ -40,7 +40,7 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 1000
+mode = 77
 % 
 % 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -239,8 +239,8 @@ unc.ISP3 = 1.3;
 CreateCube = 'yes'
 
 if strcmp(CreateCube,'yes')
-Hypercube = lhsdesign(25,6);
-Hypercube = [[1:25]' , Hypercube]; %include case numbers
+Hypercube = lhsdesign(15,6);
+Hypercube = [[1:15]' , Hypercube]; %include case numbers
 dlmwrite('LHC',Hypercube,'delimiter',' ');
 clear Hypercube
 end

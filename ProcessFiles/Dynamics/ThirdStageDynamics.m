@@ -197,18 +197,19 @@ CL  = auxdata.interp.L3interp(M ,rad2deg(Alpha ),alt);
 
 if mode == 1000
 
-CD  = CD + CD*auxdata.Cn3mod.*sin(Alpha)+ CD*auxdata.Ca3mod.*cos(Alpha);
-CL  = CL + CL*auxdata.Cn3mod.*cos(Alpha)+ CL*auxdata.Ca3mod.*sin(Alpha);
-CN  = CN + CN*auxdata.Cm3mod; % This is modified by the moment modifier because it is only used to calculate moment, so this modification serves to modify the moment directly
+CD  = CD + CD*auxdata.Cd3mod;
+CL  = CL + CL*auxdata.CL3mod;
 T = T + T*auxdata.Isp3mod;
 
-end
+D  = 1./2.*rho.*(v.^2).*A.*CD ;
+L  = 1./2.*rho.*(v.^2).*A.*CL ; % Aerodynamic lift
+else
 
 % Calculate aerodynamic forces
 D  = 1./2.*rho.*(v.^2).*A.*CD *auxdata.Cd3mod;
 L  = 1./2.*rho.*(v.^2).*A.*CL ; % Aerodynamic lift
 % N  = 1./2.*rho.*(v.^2).*A.*CN ;
-    
+end
    
 %% Thrust vectoring
 % 1.5m is subtracted as the CG is taken from the end of the nozzle, to make
@@ -223,6 +224,10 @@ Cm_full = auxdata.interp.momentInterp3_full(M ,rad2deg(Alpha ));
 Cm_empty = auxdata.interp.momentInterp3_empty(M ,rad2deg(Alpha ));
 
 Cm = (CG-CG_Empty)./(CG_Full-CG_Empty).*Cm_full + (CG_Full - CG)./(CG_Full-CG_Empty).*Cm_empty;
+
+if mode == 1000
+Cm  = Cm + Cm*auxdata.Cm3mod; % This is modified by the moment modifier because it is only used to calculate moment, so this modification serves to modify the moment directly
+end
 
 Vec_angle  = asin(Cm.*L_ThirdStage_ref.*A.*q ./(T.*(L_ThirdStage-CG-1.5))); % Positive down
 
