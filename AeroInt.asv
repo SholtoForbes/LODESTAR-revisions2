@@ -424,7 +424,7 @@ Cd_spline_ViscousEngineOn = griddedInterpolant(Mgrid_EngineOn,AOAgrid_EngineOn,a
 % permute(Mgrid_EngineOff(9,:,:),[3 2 1])
 MList_EngineOn;
 MList_EngineOff;
-plotaero = 'no'
+plotaero = 'duck';
 % this is all at 30km
 if strcmp(plotaero,'yes')
 % figure(401)
@@ -512,7 +512,7 @@ title('Drag Coefficient, Engine Off')
 c = colorbar;
 c.Label.String = 'Drag Coefficient';
 figure(503)
-contourf(Mgrid_EngineOff(:,:,7),AOAgrid_EngineOff(:,:,7),Cl_Grid_EngineOff(:,:,7),3000,'LineColor','none')
+contourf(Mgrid_EngineOff(:,:,3),AOAgrid_EngineOff(:,:,3),Cl_Grid_EngineOff(:,:,3),3000,'LineColor','none')
 xlabel('Mach no.')
 ylabel('Angle of Attack (deg)')
 title('Lift Coefficient, Engine Off')

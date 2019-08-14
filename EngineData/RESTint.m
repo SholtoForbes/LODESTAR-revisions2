@@ -3,6 +3,7 @@ function [Isp,wf,eq,q1,w,T1,P1,M1] = RESTint(M, Alpha, auxdata,T0,P0)
 % Alpha - deg
 
 T1 = auxdata.interp.tempgridded(M,Alpha).*T0;
+
 P1 = auxdata.interp.presgridded(M,Alpha).*P0; % note this is at 50kPa, modified by efficiency
 M1 = auxdata.interp.M1gridded(M, Alpha);
 

@@ -1,11 +1,11 @@
 % Calculates conditions after shock for a variety of flight conditions
 % Saves as file
 
-hangle = 5; % cone half angle (deg)
+hangle = 10.3885; % cone half angle (deg) % 10.3885 for third stage
 
 mat = [];
-for i = 5:.1:10
-    for j = 0:.1:8
+for i = 9:.5:17
+    for j = 0:.5:10
         delete('input')
         delete('output')
         

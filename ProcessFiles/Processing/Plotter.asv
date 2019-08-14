@@ -1827,7 +1827,7 @@ altlist = 24000:100:35000 ;
 alphalist = 0:.1:5;
 
 [alphagrid,altgrid] = ndgrid(alphalist,altlist);
-figure(1234501)
+figure(501)
 title('Net Isp')
 hold on
 
@@ -1852,17 +1852,12 @@ for i = 1:numel(alphagrid)
 end
 
 % [~,~,~,~,~,~, ~, ~, Fd, ~,L,Fueldt,T,Isp,~,~,~,~] = SPARTANDynamics(0, 34000, 1600,auxdata,0,0,0,deg2rad(1),0,1, mFuel21(1),mFuel21(1),mFuel21(end), 1, 0)
-netIspGrid = [];
-netIspGrid = (Tgrid-Fdgrid)./Fueldtgrid/9.81;
-netIspGrid(netIspGrid<0) = 0;
 
-
-
-figure(1234501)
+figure(501)
 subplot(2,3,temp);
 hold on
 colormap jet
-contourf(alphagrid,altgrid/1000,netIspGrid,500,'LineColor','none')
+contourf(alphagrid,altgrid/1000,(Tgrid-Fdgrid)./Fueldtgrid/9.81,500,'LineColor','none')
 xlabel('Angle of Attack (deg)','FontSize',8);
 ylabel('Altitude (km)','FontSize',8);
 title(['Mach ' num2str(M_temp)],'FontSize',10)
@@ -1873,8 +1868,8 @@ alpha_temp = interp1(M21,alpha21,M_temp);
 plot(rad2deg(alpha_temp),alt_temp/1000,'o','MarkerSize',5,'MarkerEdgeColor','k','MarkerFaceColor','m')
 if auxdata.returnMode == 0 && auxdata.mode == 1
     [States,index] = unique(ConstqStates(:,3));
-alt_temp_constq = interp1(States,ConstqStates(index,2),M_temp);
-alpha_temp_constq = interp1(States,ConstqStates(index,9),M_temp);
+alt_temp_constq = interp1(States,ConstqStates(:,index),M_temp);
+alpha_temp_constq = interp1(States,ConstqStates(:,9),M_temp);
 plot(rad2deg(alpha_temp_constq ),alt_temp_constq /1000,'o','MarkerSize',5,'MarkerEdgeColor','k','MarkerFaceColor','c')
 
 legend('-','Opimised Trajectory','Constant q Trajectory')
@@ -1936,9 +1931,9 @@ plot(rad2deg(alpha_temp),alt_temp/1000,'o','MarkerSize',5,'MarkerEdgeColor','k',
 end
 
 
-saveas(figure(1234501),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))),filesep,strcat('NetIsp',namelist{j},'.fig')]);
+saveas(figure(501),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))),filesep,strcat('NetIsp',namelist{j},'.fig')]);
 set(gcf, 'PaperPositionMode', 'auto');
-print(figure(1234501),strcat('NetIsp',namelist{j}),'-dpng');
+print(figure(501),strcat('NetIsp',namelist{j}),'-dpng');
 movefile(strcat('NetIsp',namelist{j},'.png'),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 saveas(figure(503),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))),filesep,strcat('Thrust',namelist{j},'.fig')]);
 set(gcf, 'PaperPositionMode', 'auto');
@@ -1949,7 +1944,7 @@ set(gcf, 'PaperPositionMode', 'auto');
 print(figure(504),strcat('Fueldt',namelist{j}),'-dpng');
 movefile(strcat('Fueldt',namelist{j},'.png'),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 
-close(figure(1234501))
+close(figure(501))
 close(figure(503))
 close(figure(504))
 

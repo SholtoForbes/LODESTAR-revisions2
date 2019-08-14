@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M0, D, rho0,L,Fueldt,T,Isp,q1,flap_deflection,heating_rate_stag,CG,T1,P1,M1,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip,heating_rate_LE] = SPARTANDynamics(gamma, alt, v,auxdata,zeta,phi,xi,alpha,eta,throttle,mFuel,mFuelinit,mFuelend,ThirdStage,forwardflag)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M0, D, rho0,L,Fueldt,T,Isp,q1,flap_deflection,heating_rate_stag,CG,T1,P1,M1,P0,T0,P_1_tip,T_1_tip,rho_1_tip,M_1_tip,v_1_tip,heating_rate_LE,v1,rho1] = SPARTANDynamics(gamma, alt, v,auxdata,zeta,phi,xi,alpha,eta,throttle,mFuel,mFuelinit,mFuelend,ThirdStage,forwardflag)
 %===================================================
 %
 % SPARTAN DYNAMICS SIMULATION
@@ -33,7 +33,12 @@ P0 = ppval(interp.P0_spline, alt);
 %% Thrust 
 
 
-[Isp_nozzlefront,Fueldt_max,eq,q1,T1,P1,M1] = RESTint(M0, rad2deg(alpha), auxdata,T0,P0); % Calculate C-REST engine properties
+[Isp_nozzlefront,Fueldt_max,eq,q1,w,T1,P1,M1] = RESTint(M0, rad2deg(alpha), auxdata,T0,P0); % Calculate C-REST engine properties
+
+c1 = sqrt(1.4.*8.314.*T1./0.0289645);
+v1 = M1.*c1;
+
+rho1 = P1./(287*T1);
 
 % Isp = Isp_nozzlefront.*auxdata.Ispmod ; %
 Isp = Isp_nozzlefront; %
@@ -71,7 +76,7 @@ mFuel_cyltanks = 710;
 CG_withFuel_noThirdStage = 14.55; % CG from CREO with no third stage but full fuel
 CG_cyltanksEmpty_noThirdStage = 14.30;
 CG_cyltanksEmpty_withThirdStage = 15.13; % CG with third stage, but no fuel
-CG_noFuel_noThirdStage = 15.16;% CG  at no fuel conditition (it is assumed that the fuel for the return is used so as to not change the CG)
+CG_noFuel_noThirdStage = 15.16;% CG  at no fuel conditition 
 CG_noFuel_withThirdStage = 15.74; % CG with third stage, but no fuel
 CG_withFuel_withThirdStage = 15.24; % CG with third stage and full fuel
 % 
@@ -275,6 +280,9 @@ heating_rate_stag_wing = heating_rate_stag_wing';
 
 heating_rate_LE = (0.5*heating_rate_stag_wing*cos(deg2rad(sweep_angle)).^2 + heating_rate_FP*sin(deg2rad(sweep_angle)).^2) ;
 
+% forebody heating
+% ST_forebody = auxdata.interp.StInterp_forebody(M0,rad2deg(alpha),alt);
+% q_stanton = ST_forebody.*rho1.*v1; % adiabatic wall approx (i think)
 % =========================================================================
 end
 

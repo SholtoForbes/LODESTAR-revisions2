@@ -1,4 +1,4 @@
-function [rdot,xidot,phidot,gammadot,vdot,zetadot, mdot, Vec_angle, T, L, D, q] = ThirdStageDynamics(alt,gamma,v,m,Alpha,time,auxdata, Alphadot, phi, zeta)
+function [rdot,xidot,phidot,gammadot,vdot,zetadot, mdot, Vec_angle, T, L, D, q, M, Temp, p, rho] = ThirdStageDynamics(alt,gamma,v,m,Alpha,time,auxdata, Alphadot, phi, zeta)
 % Function for simulating the Third Stage Rocket Trajectory
 % Created by Sholto Forbes-Spyratos
 mode = auxdata.mode;
@@ -149,7 +149,7 @@ exo_elem = find(alt>85000); % Find the elements that are exoatmospheric
 rho(atmo_elem) = ppval(auxdata.interp.rho_spline, alt(atmo_elem)); % Density kg/m^3, in atmosphere
 c(atmo_elem) = ppval(auxdata.interp.c_spline, alt(atmo_elem)); % Speed of sound (m/s), in atmosphere
 p(atmo_elem) = ppval(auxdata.interp.P0_spline, alt(atmo_elem)); % Pressure (Pa), in atmosphere
-T(atmo_elem) = ppval(auxdata.interp.T0_spline, alt(atmo_elem)); % Temperatue (K), in atmosphere
+Temp(atmo_elem) = ppval(auxdata.interp.T0_spline, alt(atmo_elem)); % Temperatue (K), in atmosphere
 
 % Calculate exoatmospheric properties, outside of atmosphere
 % This smooths the atmospheric properties to 0 as the rocket leaves the
@@ -157,12 +157,13 @@ T(atmo_elem) = ppval(auxdata.interp.T0_spline, alt(atmo_elem)); % Temperatue (K)
 rho(exo_elem) = ppval(auxdata.interp.rho_spline,85000).*gaussmf(alt(exo_elem),[100 85000]); % Density kg/m^3, exoatmosphere
 c(exo_elem) = ppval(auxdata.interp.c_spline, 85000); % Speed of sound (m/s), exoatmosphere
 p(exo_elem) = ppval(auxdata.interp.p_spline,85000).*gaussmf(alt(exo_elem),[100 85000]); % Pressure (Pa), exoatmosphere
-T(exo_elem) = ppval(auxdata.interp.T0_spline, alt(exo_elem)); % Temperatue (K), in atmosphere
+Temp(exo_elem) = ppval(auxdata.interp.T0_spline, alt(exo_elem)); % Temperatue (K), in atmosphere
 
 
 rho = rho.';
 c = c.';
 p = p.';
+Temp = Temp.';
 
 q(atmo_elem) = 0.5.*rho(atmo_elem).*v(atmo_elem).^2; % Dynamic pressure (Pa), in atmosphere
 M(atmo_elem)  = v(atmo_elem) ./c(atmo_elem) ; % Mach number, in atmosphere

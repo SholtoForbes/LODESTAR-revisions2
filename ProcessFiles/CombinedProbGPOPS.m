@@ -21,7 +21,7 @@ clc
 % fully turbulent
 
 % mode 6: First Stage mass
-% mode 7: Third Stage Drag Variation %%% XXX Change to lift
+% mode 7: Third Stage Drag Variation %%% XXX Change to lift maybe
 % mode 8: Third Stage Mass Variation
 % mode 9: Third Stage Isp variation
 % mode 10: SPARTAN mass 
@@ -40,7 +40,7 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 1000
+mode = 1
 % 
 % 
 returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
@@ -731,7 +731,7 @@ for i = 1:length(Mlist3)
         for k = 1:length(altlist3)
 %             L3grid(i,j,k) = L3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
         
-            
+            if mode ~=77% this is just a hack job, since this isnt used anyway
             % Rarified flow from Wuilbercq
             T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
             P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
@@ -749,9 +749,15 @@ for i = 1:length(Mlist3)
             
             Cf_cont_temp = L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
             
+            
             if Kn_temp > 0.01
                 Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.002,0.01]));
             else
+                Cf_temp = Cf_cont_temp;
+            end
+            
+            else
+                Cf_cont_temp = L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
                 Cf_temp = Cf_cont_temp;
             end
             
@@ -774,7 +780,7 @@ D3grid = zeros(length(Mlist3),length(AoAlist3),length(altlist3));
 for i = 1:length(Mlist3)
     for j = 1:length(AoAlist3)
         for k = 1:length(altlist3)
-            
+            if mode ~= 77 % hack job, because this isnt used anyway
             % Rarified flow from Wuilbercq
             T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
             P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
@@ -795,6 +801,11 @@ for i = 1:length(Mlist3)
             if Kn_temp > 0.01
                 Cf_temp = Cf_cont_temp + PB*(Cf_rarified_temp - Cf_cont_temp)*(1-gaussmf(Kn,[0.002,0.01]));
             else
+                Cf_temp = Cf_cont_temp;
+            end
+            
+            else
+                Cf_cont_temp = D3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
                 Cf_temp = Cf_cont_temp;
             end
             
@@ -829,6 +840,35 @@ end
 
 auxdata.interp.momentInterp3_full = griddedInterpolant(Mgrid3_moment,AoAgrid3_moment,moment3Grid_full);
 auxdata.interp.momentInterp3_empty = griddedInterpolant(Mgrid3_moment,AoAgrid3_moment,moment3Grid_empty);
+
+plotaero3 = 'no'
+if strcmp(plotaero3,'yes')
+    
+    figure(601)
+contourf(Mgrid3(:,:,3),AoAgrid3(:,:,3),L3grid(:,:,3)./D3grid(:,:,3),3000,'LineColor','none')
+xlabel('Mach no.')
+ylabel('Angle of Attack (deg)')
+title('L/D')
+c = colorbar;
+c.Label.String = 'L/D';
+figure(602)
+contourf(Mgrid3(:,:,3),AoAgrid3(:,:,3),D3grid(:,:,3),3000,'LineColor','none')
+xlabel('Mach no.')
+ylabel('Angle of Attack (deg)')
+title('Drag Coefficient')
+c = colorbar;
+c.Label.String = 'Drag Coefficient';
+figure(603)
+contourf(Mgrid3(:,:,3),AoAgrid3(:,:,3),L3grid(:,:,3),3000,'LineColor','none')
+xlabel('Mach no.')
+ylabel('Angle of Attack (deg)')
+title('Lift Coefficient')
+c = colorbar;
+c.Label.String = 'Lift Coefficient';
+    
+end
+
+
 
 %Max Aoa (reverse interp with CN)
 % Aero3forMaxAoa = dlmread('ThirdStageAeroCoeffs.txt'); % import aerodynamics with approximated altitudes for max aoa calculations
@@ -1090,6 +1130,10 @@ auxdata = AeroCalc(auxdata);
 
 end
 
+%% stanton no interp
+StantonArray = dlmread('stantons.dat');
+auxdata.interp.StInterp_forebody = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,4));
+
 %% Import Bounds %%========================================================
 
 if mode == 0
@@ -1181,7 +1225,7 @@ bounds.phase(2).finaltime.upper = Stage2.Bounds.time(2);
 %     bounds.phase(2).path.upper = [50500];
 % else
     bounds.phase(2).path.lower = [0,0];
-    bounds.phase(2).path.upper = [50000,8000];
+    bounds.phase(2).path.upper = [50000,1450];
 % end
 % elseif mode ==3 || mode == 32
 %         bounds.phase(2).path.lower = [49970];
@@ -1287,7 +1331,7 @@ bounds.phase(3).control.upper = [deg2rad(.5), deg2rad(1), .2];
 end
 % Path Bounds
 bounds.phase(3).path.lower = [0,0];
-bounds.phase(3).path.upper = [50000,8000];
+bounds.phase(3).path.upper = [50000,1450];
 
 bounds.eventgroup(3).lower = [0]; 
 bounds.eventgroup(3).upper = [0]; 
