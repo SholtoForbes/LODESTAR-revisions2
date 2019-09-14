@@ -1586,7 +1586,12 @@ dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WmFreturn', namelist{j},
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\Wreturn', namelist{j},returnparam ,'}{ ', num2str(W_22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 end
 
+if any(q3<5000)
 qlt20 = find(q3<5000);
+else
+qlt20 = find(qexo<5000);
+end
+
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdqOverFive', namelist{j},returnparam ,'}{ ', num2str(round(time3(qlt20(1))-time3(1),2),'%.1f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdmaxAoA', namelist{j},returnparam ,'}{ ', num2str(rad2deg(max(aoa3)),'%.1f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdcircv', namelist{j},returnparam ,'}{ ', num2str(v3exo(end),'%.1f') , '}'), '-append','delimiter','','newline', 'pc');

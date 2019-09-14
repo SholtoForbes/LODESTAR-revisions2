@@ -40,15 +40,15 @@ clc
 
 % mode 77: atmospheric varation study
 
-mode = 1
+% trajmode = 1
 % 
 % 
-returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
+% returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 
-% for mode = [5 9 10 11]
-% returnMode = 1%
+for trajmode = [1000]
+ for returnMode = [1]%
 
-        auxdata.mode = mode;
+        auxdata.mode = trajmode;
         auxdata.returnMode = returnMode;
 
 %%
@@ -65,44 +65,44 @@ auxdata.m2mod = 1;
 addpath('.\Processing\num2words')
 
 % Mode 1
-if mode == 1
+if trajmode == 1
 
 namelist{1} = 'Standard';
 end
 
 % mode 0
-if mode == 0
+if trajmode == 0
 
 namelist{1} = 'Alternate';
 end
 
 % mode 01
-if mode == 101
+if trajmode == 101
 
 namelist{1} = 'Rainbow';
 end
 
-if mode == 90
+if trajmode == 90
 
 namelist{1} = 'Constq';
 end
 % Mode 2
-q_vars = [40000 45000 50000 55000 60000]  % Set dynamic pressures to be investigated
-if mode == 2
+q_vars = [45000 47500 50000 52500 55000]  % Set dynamic pressures to be investigated
+if trajmode == 2
 
 %     for i = 1:length(q_vars)
 %         namelist{i} = ['qmax' num2words(q_vars(i)/1000)];
 %     end
 if returnMode == 1
-namelist = {'qForty' 'qFortyFive' 'qStandard' 'qFiftyFive' 'qSixty'}
+namelist = {'qFortyFive' 'qFortySevenFive' 'qStandard' 'qFiftyTwoFive' 'qFiftyFive'}
 else
-namelist = {'qFortyNoReturn' 'qFortyFiveNoReturn' 'qStandardNoReturn' 'qFiftyFiveNoReturn' 'qSixtyNoReturn'}
+namelist = {'qFortyFiveNoReturn' 'qFortySevenNoReturn' 'qStandardNoReturn' 'qFiftyTwoNoReturn' 'qFiftyFiveNoReturn'}
 end
 end
 
 % Mode 3
 Isp_vars = [0.9 0.95 1 1.05 1.1] 
-if mode == 3
+if trajmode == 3
 
 %     for i = 1:length(Isp_vars)
 %         namelist{i} = ['Isp' num2words(Isp_vars(i)*100) '%'];
@@ -115,7 +115,7 @@ end
 end
 % Mode 4
 Cd_vars = [0.9 0.95 1 1.05 1.1] 
-if mode == 4
+if trajmode == 4
 
 %     for i = 1:length(Cd_vars)
 %         namelist{i} = ['Cd' num2words(Cd_vars(i)*100) '%'];
@@ -129,7 +129,7 @@ end
 
 % Mode 5
 vCd_vars = [0.2 0.5 1 1.07 1.15]
-if mode == 5 
+if trajmode == 5 
 %     for i = 1:length(vCd_vars)
 %         namelist{i} = ['vCd' num2words(vCd_vars(i)*100) '%'];
 %     end  
@@ -142,28 +142,28 @@ end
     
 % Mode 6
 % First Stage Structural Mass (total mass kept constant)
-FirstStagem_vars = [0.90 0.95 1 1.05 1.1] 
-if mode == 6 
+FirstStagem_vars = [0.95 0.975 1 1.025 1.05]  % less mass makes the velocity too low for the third stage to work
+if trajmode == 6 
 if returnMode == 1
-namelist = {'FirstStagemNinety' 'FirstStagemNinetyFive' 'FirstStagemStandard' 'FirstStagemOneHundredFive' 'FirstStagemOneHundredTen'}
+namelist = {'FirstStagemNinetyFive' 'FirstStagemNinetySevenFive' 'FirstStagemStandard' 'FirstStagemOneHundredTwoFive' 'FirstStagemOneHundredFive'}
 else
-namelist = {'FirstStagemNinetyNoReturn' 'FirstStagemNinetyFiveNoReturn' 'FirstStagemStandardNoReturn' 'FirstStagemOneHundredFiveNoReturn' 'FirstStagemOneHundredTenNoReturn'}
+namelist = {'FirstStagemNinetyFiveNoReturn' 'FirstStagemNinetySevenFiveNoReturn' 'FirstStagemStandardNoReturn' 'FirstStagemOneHundredTwoFiveNoReturn' 'FirstStagemOneHundredFiveNoReturn'}
 end
 end
 
 % Mode 7
-Cd3_vars = [0.80 0.9 1 1.1 1.2]  
-if mode == 7
+Cd3_vars = [0.90 0.95 1 1.05 1.1]  
+if trajmode == 7
  if returnMode == 1
-        namelist = {'CdThreeEighty' 'CdThreeNinety' 'CdThreeStandard' 'CdThreeOneHundredTen' 'CdThreeOneHundredTwenty'};
+        namelist = {'CdThreeNinety' 'CdThreeNinetyFive' 'CdThreeStandard' 'CdThreeOneHundredFive' 'CdThreeOneHundredTen'};
  else
-     namelist = {'CdThreeEightyNoReturn' 'CdThreeNinetyNoReturn' 'CdThreeStandardNoReturn' 'CdThreeOneHundredTenNoReturn' 'CdThreeOneHundredTwentyNoReturn'};
+     namelist = {'CdThreeNinetyNoReturn' 'CdThreeNinetyFiveNoReturn' 'CdThreeStandardNoReturn' 'CdThreeOneOneHundredFiveNoReturn' 'CdThreeOneHundredTenNoReturn'};
  end
 end   
    
 % Mode 8
 m3_vars = [0.9 0.95 1 1.05 1.1] 
-if mode == 8 
+if trajmode == 8 
 %     for i = 1:length(m3_vars)
 %         namelist{i} = ['m3' num2words(m3_vars(i)*100) '%'];
 %     end  
@@ -175,34 +175,34 @@ end
 end 
     
 % Mode 9
-Isp3_vars = [0.95 0.975 1 1.025 1.05]  
-if mode == 9
+Isp3_vars = [0.90 0.95 1 1.05 1.1]  
+if trajmode == 9
 %     for i = 1:length(Isp3_vars)
 %         namelist{i} = ['T3' num2words(Isp3_vars(i)*100) '%'];
 %     end 
 if returnMode == 1
-namelist = {'ISPThreeNinetyFive' 'ISPThreeNinetySevenFive' 'ISPThreeStandard' 'ISPThreeOneHundredTwoFive' 'ISPThreeOneHundredFive'}
+namelist = {'ISPThreeNinety' 'ISPThreeNinetyFive' 'ISPThreeStandard' 'ISPThreeOneHundredFive' 'ISPThreeOneHundredTen'}
 else
-namelist = {'ISPThreeNinetyFiveNoReturn' 'ISPThreeNinetySevenFiveNoReturn' 'ISPThreeStandardNoReturn' 'ISPThreeOneHundredTwoFiveNoReturn' 'ISPThreeOneHundredFiveNoReturn'}
+namelist = {'ISPThreeNinetyNoReturn' 'ISPThreeNinetyFiveNoReturn' 'ISPThreeStandardNoReturn' 'ISPThreeOneHundredFiveNoReturn' 'ISPThreeOneHundredTenNoReturn'}
 end
 end  
     
 % mode 10
-mSPARTAN_vars = [0.95 0.975 1 1.025 1.05] 
-if mode == 10 
+mSPARTAN_vars = [0.90 0.95 1 1.05 1.1] 
+if trajmode == 10 
 %     for i = 1:length(mSPARTAN_vars)
 %         namelist{i} = ['mSPARTAN' num2words(mSPARTAN_vars(i)*100) '%'];
 %     end   
 if returnMode == 1
-namelist = {'mSPARTANNinetyFive' 'mSPARTANNinetySevenFive' 'mSPARTANStandard' 'mSPARTANOneHundredTwoFive' 'mSPARTANOneHundredFive'}
+namelist = {'mSPARTANNinety' 'mSPARTANNinetyFive' 'mSPARTANStandard' 'mSPARTANOneHundredFive' 'mSPARTANOneHundredTen'}
 else
-namelist = {'mSPARTANNinetyFiveNoReturn' 'mSPARTANNinetySevenFiveNoReturn' 'mSPARTANStandardNoReturn' 'mSPARTANOneHundredTwoFiveNoReturn' 'mSPARTANOneHundredFiveNoReturn'}
+namelist = {'mSPARTANNinetyNoReturn' 'mSPARTANNinetyFiveNoReturn' 'mSPARTANStandardNoReturn' 'mSPARTANOneHundredFiveNoReturn' 'mSPARTANOneHundredTenNoReturn'}
 end
 end 
  
 %mode 11
 mFuel_vars = [0.9 0.95 1 1.05 1.1]     
-if mode == 11
+if trajmode == 11
 %     for i = 1:length(mFuel_vars)
 %         namelist{i} = ['mFuel' num2words(mFuel_vars(i)*100) '%'];
 %     end  
@@ -215,12 +215,12 @@ end
 end
 
 %interactionmode
-if mode == 99
+if trajmode == 99
  namelist = {};
 end
 
 % Latin Hypercube Mode
-if mode == 1000
+if trajmode == 1000
   
 %Uncertainties (%)
 unc.ISP1 = 1.3;
@@ -239,8 +239,8 @@ unc.ISP3 = 1.3;
 CreateCube = 'yes'
 
 if strcmp(CreateCube,'yes')
-Hypercube = lhsdesign(25,6);
-Hypercube = [[1:25]' , Hypercube]; %include case numbers
+Hypercube = lhsdesign(10,6);
+Hypercube = [[1:10]' , Hypercube]; %include case numbers
 dlmwrite('LHC',Hypercube,'delimiter',' ');
 clear Hypercube
 end
@@ -254,7 +254,7 @@ end
     
 end
 
-if mode == 77
+if trajmode == 77
     if returnMode == 1
     namelist = {'MinTGroundMinTStrat' 'MaxTGroundMinTStrat' 'MinTGroundMaxTStrat' 'MaxTGroundMaxTStrat'}
     else
@@ -291,13 +291,13 @@ auxdata.delta = deg2rad(0); % thrust vector angle
 % lat0 = deg2rad(-12.4466); % Equatorial Launch Australia Spaceport near Nhulunbuy
 % lon0 = deg2rad(136.845);
 
-if mode == 0
+if trajmode == 0
 % lat0 = deg2rad(-38.4314); % Southern Launch Australia, assumed launch from Cape Nelson
 % lon0 = deg2rad(141.5420);
 lat0 = deg2rad(-32.9106); % Southern Launch Australia, assumed launch from Streaky Bay
 lon0 = deg2rad(134.0724);
 %streaky bay council report with support for launch site: https://www.streakybay.sa.gov.au/webdata/resources/minutesAgendas/Council%20Agenda-Report%20-%20October%202017.pdf
-elseif mode == 101
+elseif trajmode == 101
   lat0 = deg2rad(-25.906146); % Equatorial Launch Australia Spaceport near Nhulunbuy
 lon0 = deg2rad(153.098513);  
 else
@@ -497,10 +497,10 @@ vMax1 = 3000;
 mMin1 = mEmpty;
 mMax1 = mTotal;
 
-if mode == 0
+if trajmode == 0
 phiMin1 = -1.5;
 phiMax1 = -0.5;
-elseif mode == 101
+elseif trajmode == 101
 phiMin1 = -0.7;
 phiMax1 = 0.4;
 else
@@ -513,7 +513,7 @@ end
 % zetaMin1 = -2*pi;
 % zetaMax1 = 2*pi;
 
-if mode == 0
+if trajmode == 0
 zetaMin1 = -2*pi;
 zetaMax1 = -pi/2; % constrained to launch over sea, to the west   
 else
@@ -584,7 +584,7 @@ guess.phase(1).state(:,3) = [mMax1; m1FuelDepleted];
 guess.phase(1).state(:,4) = [gamma0; 0];
 guess.phase(1).state(:,5) = [alpha0; 0];
 
-if mode == 0
+if trajmode == 0
 guess.phase(1).state(:,6) = [-pi;-pi];
 else
 guess.phase(1).state(:,6) = [0; 0];
@@ -607,7 +607,7 @@ Atmosphere = dlmread('atmosphere.txt');
 interp.Atmosphere = Atmosphere;
 auxdata.interp.Atmosphere = interp.Atmosphere;
 
-if mode ~= 77
+if trajmode ~= 77
 auxdata.interp.c_spline = spline( interp.Atmosphere(:,1),  interp.Atmosphere(:,5)); % Calculate speed of sound using atmospheric data
 auxdata.interp.rho_spline = spline( interp.Atmosphere(:,1),  interp.Atmosphere(:,4)); % Calculate density using atmospheric data
 auxdata.interp.mu_spline = spline( interp.Atmosphere(:,1),  interp.Atmosphere(:,6)); % Calculate dynamic viscosity using atmospheric data
@@ -731,7 +731,7 @@ for i = 1:length(Mlist3)
         for k = 1:length(altlist3)
 %             L3grid(i,j,k) = L3scattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k)) + L3Vscattered(Mgrid3(i,j,k),AoAgrid3(i,j,k),altgrid3(i,j,k));
         
-            if mode ~=77% this is just a hack job, since this isnt used anyway
+            if trajmode ~=77% this is just a hack job, since this isnt used anyway
             % Rarified flow from Wuilbercq
             T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
             P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
@@ -780,7 +780,7 @@ D3grid = zeros(length(Mlist3),length(AoAlist3),length(altlist3));
 for i = 1:length(Mlist3)
     for j = 1:length(AoAlist3)
         for k = 1:length(altlist3)
-            if mode ~= 77 % hack job, because this isnt used anyway
+            if trajmode ~= 77 % hack job, because this isnt used anyway
             % Rarified flow from Wuilbercq
             T_temp = ppval(auxdata.interp.T0_spline,altgrid3(i,j,k));
             P_temp = ppval(auxdata.interp.P0_spline,altgrid3(i,j,k));
@@ -1124,7 +1124,7 @@ auxdata.interp.IspGridded = griddedInterpolant(grid.Mgrid_eng,grid.T_eng,Isp_gri
 % Call aerodynamic importer and interpolator if not doing hypercube
 % analysis
 
-if mode ~= 1000 && mode ~= 77
+if trajmode ~= 1000 && trajmode ~= 77
     
 auxdata = AeroCalc(auxdata);
 
@@ -1136,9 +1136,9 @@ auxdata.interp.StInterp_forebody = scatteredInterpolant(StantonArray(:,1),Stanto
 
 %% Import Bounds %%========================================================
 
-if mode == 0
+if trajmode == 0
 latMin2 = -1.5;  latMax2 = -0.5;
-elseif mode == 101
+elseif trajmode == 101
   latMin2 = -0.7;  latMax2 = 0.4;  
 else
 latMin2 = -0.5;  latMax2 = 0.5;
@@ -1150,7 +1150,7 @@ end
 
 % aoaMin21 = 0;  aoaMax21 = 8*pi/180;
 aoaMin21 = 0;  aoaMax21 = 10*pi/180;
-if mode == 0
+if trajmode == 0
     bankMin21 = -90*pi/180; bankMax21 =   90*pi/180; 
 else
     if returnMode == 0
@@ -1167,7 +1167,7 @@ end
 % bankMin21 = -1*pi/180; bankMax21 =   90*pi/180;
 % end
 
-if mode == 0
+if trajmode == 0
     zetaMin21 = -4*pi;
     zetaMax21 = 2*pi;
 else
@@ -1195,7 +1195,7 @@ end
 % End States
 % End bounds are set slightly differently, to encourage an optimal solution
 bounds.phase(2).finalstate.lower = [20000, lonMin, latMin2, 2300, 0, zetaMin21, aoaMin21, 0, Stage2.End.mFuel];
-if mode == 90
+if trajmode == 90
 bounds.phase(2).finalstate.upper = [50000, lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(0.5), zetaMax21, aoaMax21, 0, Stage2.Initial.mFuel];
 else
 bounds.phase(2).finalstate.upper = [50000, lonMax, latMax2, Stage2.Bounds.v(2), deg2rad(20), zetaMax21, aoaMax21, 0, Stage2.Initial.mFuel];
@@ -1225,13 +1225,13 @@ bounds.phase(2).finaltime.upper = Stage2.Bounds.time(2);
 %     bounds.phase(2).path.upper = [50500];
 % else
     bounds.phase(2).path.lower = [0,0];
-    bounds.phase(2).path.upper = [50000,1450];
+    bounds.phase(2).path.upper = [50000,10000];
 % end
 % elseif mode ==3 || mode == 32
 %         bounds.phase(2).path.lower = [49970];
 %     bounds.phase(2).path.upper = [50030];
 % end
-if mode == 90
+if trajmode == 90
 bounds.phase(2).integral.lower = 0;
 bounds.phase(2).integral.upper = 10000000;
 end
@@ -1240,7 +1240,7 @@ end
 % solution, even for a well defined problem. 
 
 % guess.phase(2).state(:,1)   = [24000;35000];
-if mode == 0
+if trajmode == 0
 guess.phase(2).state(:,2)   = [lon0;lon0];
 guess.phase(2).state(:,3)   = [lat0;lat0-0.1]; 
 else
@@ -1251,7 +1251,7 @@ end
 guess.phase(2).state(:,4)   = Stage2.Guess.v.';
 guess.phase(2).state(:,5)   = Stage2.Guess.gamma.';
 
-if mode == 0
+if trajmode == 0
     guess.phase(2).state(:,6)   = [-pi;-pi];
 else
 guess.phase(2).state(:,6)   = Stage2.Guess.zeta.';
@@ -1264,7 +1264,7 @@ guess.phase(2).state(:,9) 	= [Stage2.Initial.mFuel; 100];
 guess.phase(2).control      = [[0;0],[0;0]];
 guess.phase(2).time          = [0;650];
 
-if mode == 90
+if trajmode == 90
 guess.phase(2).integral = 0
 end
 % Tie stages together
@@ -1277,7 +1277,7 @@ altMin = 10;  altMax = 70000;
 speedMin = 10;        speedMax = 5000;
 fpaMin = -80*pi/180;  fpaMax =  80*pi/180;
 
-if mode == 0
+if trajmode == 0
 aziMin = -4*pi; aziMax =  4*pi;
 else
 aziMin = 60*pi/180; aziMax =  500*pi/180;
@@ -1285,7 +1285,7 @@ end
 
 mFuelMin = 0; mFuelMax = 500;
 
-if mode == 0
+if trajmode == 0
 bankMin21 = -90*pi/180; bankMax21 =   90*pi/180;  
 else
 bankMin21 = -10*pi/180; bankMax21 =   90*pi/180;
@@ -1331,7 +1331,7 @@ bounds.phase(3).control.upper = [deg2rad(.5), deg2rad(1), .2];
 end
 % Path Bounds
 bounds.phase(3).path.lower = [0,0];
-bounds.phase(3).path.upper = [50000,1450];
+bounds.phase(3).path.upper = [50000,10000];
 
 bounds.eventgroup(3).lower = [0]; 
 bounds.eventgroup(3).upper = [0]; 
@@ -1340,7 +1340,7 @@ bounds.eventgroup(3).upper = [0];
 tGuess              = [440; 1500];
 altGuess            = [35000; 100];
 
-if mode == 0
+if trajmode == 0
 lonGuess            = [lon0; lon0-.1*pi/180];
 latGuess            = [lat0-0.1;lat0];
 else
@@ -1351,7 +1351,7 @@ end
 speedGuess          = [3000; 10];
 fpaGuess            = [0; 0];
 
-if mode == 0
+if trajmode == 0
 aziGuess            = [-pi; 0]; 
 else
 aziGuess            = [deg2rad(97); deg2rad(270)];
@@ -1372,7 +1372,7 @@ guess.phase(3).time    = tGuess;
 %% Third Stage
 
 altMin3 = 30000;  altMax3 = 84000;
-if mode == 0
+if trajmode == 0
 phiMin3 = -1.5;         phiMax3 = -0.5;   
 else
 phiMin3 = -0.5;         phiMax3 = 0.5;
@@ -1380,7 +1380,7 @@ end
 vMin3 = 10;        vMax3 = 8000;
 gammaMin3=deg2rad(-5);  gammaMax3 =  deg2rad(30);
 
-if mode == 0
+if trajmode == 0
 zetaMin3 = deg2rad(-180); zetaMax3 =  deg2rad(0); 
 else
 zetaMin3 = deg2rad(80); zetaMax3 =  deg2rad(120);
@@ -1430,7 +1430,7 @@ aoaGuess            = [deg2rad(20); deg2rad(20)];
 
 
 
-if mode == 0
+if trajmode == 0
 phiGuess = [lat0-0.1;lat0-0.1];
 zetaGuess = [-deg2rad(97);-deg2rad(97)];  
 else
@@ -1450,7 +1450,7 @@ mesh.method       = 'hp-LiuRao-Legendre';
 % mesh.method       = 'hp-LiuRao'; 
 %  mesh.method       = 'hp-DarbyRao';
 % mesh.maxiterations = 10;
-if mode == 90
+if trajmode == 90
   mesh.maxiterations = 6;  
 elseif returnMode == 1
  mesh.maxiterations = 4;   
@@ -1498,7 +1498,7 @@ num_it = 4; % Define number of parallel iterations
 
 % Create variable setup structure
 %% for interaction testing
-if mode == 99
+if trajmode == 99
     modes_list = [2 3 4]; % define modes to generate interactions for
     runs1 = [-1 -1  zeros(1,length(modes_list))]; % defines the number of runs to perform. Need to define two -1 and two 1
     runs2 = [-1  1 zeros(1,length(modes_list))]; % defines the number of runs to perform. Need to define two -1 and two 1
@@ -1596,7 +1596,7 @@ end
 
 %% For Hypercube
 
-if mode == 1000
+if trajmode == 1000
     for i = 1:length(Hypercube(:,1))  
         setup_variations{i} = setup;
         
@@ -1625,11 +1625,11 @@ if mode == 1000
 end
 
 %% for independent variable testing
-if mode == 1 || mode == 0 || mode == 101
+if trajmode == 1 || trajmode == 0 || trajmode == 101
     setup_variations{1} = setup;
-elseif mode == 90
+elseif trajmode == 90
     setup_variations{1} = setup;
-elseif mode == 2
+elseif trajmode == 2
     for i = 1:length(q_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.bounds.phase(1).path.upper(1) = q_vars(i);
@@ -1637,7 +1637,7 @@ elseif mode == 2
         setup_variations{i}.bounds.phase(3).path.upper(1) = q_vars(i);
     end
 %     setup_variations{2}.guess.phase(2).state(:,4) = [1500;2800]; % modify guess for badly converging solution
-elseif mode == 3
+elseif trajmode == 3
     for i = 1:length(Isp_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.Ispmod = Isp_vars(i);
@@ -1649,32 +1649,32 @@ elseif mode == 3
 %         setup_variations{4}.guess.phase(2).state(:,4) = [1500;2700]; % modify guess for badly converging solution
 %         setup_variations{5}.guess.phase(2).state(:,4) = [1500;2700]; % modify guess for badly converging solution
 %     end
-elseif mode == 4
+elseif trajmode == 4
     for i = 1:length(Cd_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.Cdmod = Cd_vars(i);
     end
     
-elseif mode == 5 % not yet implemented
+elseif trajmode == 5 % not yet implemented
     for i = 1:length(vCd_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.vCdmod = vCd_vars(i);
     end
-    elseif mode == 6 % not yet implemented
+    elseif trajmode == 6 % not yet implemented
     for i = 1:length(FirstStagem_vars)  
         setup_variations{i} = setup;
         
-%         setup_variations{i}.bounds.phase(1).initialstate.upper(3) = mMax1+mRocket*(FirstStagem_vars(i)-1);
-%         setup_variations{i}.bounds.phase(1).state.upper(3) = mMax1+mRocket*(FirstStagem_vars(i)-1);
-        setup_variations{i}.bounds.phase(1).finalstate.lower(3) = m1FuelDepleted + mEmpty*(FirstStagem_vars(i)-1);
-%         setup_variations{i}.bounds.phase(1).finalstate.upper(3) = mMax1+mRocket*(FirstStagem_vars(i)-1);
+         setup_variations{i}.bounds.phase(1).initialstate.upper(3) = mMax1*(FirstStagem_vars(i));
+         setup_variations{i}.bounds.phase(1).state.upper(3) = mMax1*(FirstStagem_vars(i));
+%         setup_variations{i}.bounds.phase(1).finalstate.lower(3) = m1FuelDepleted + mEmpty*(FirstStagem_vars(i)-1);
+         setup_variations{i}.bounds.phase(1).finalstate.upper(3) = mMax1*(FirstStagem_vars(i));
     end
-    elseif mode == 7 %
+    elseif trajmode == 7 %
     for i = 1:length(Cd3_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.Cd3mod = Cd3_vars(i);
     end
-elseif mode == 8 %
+elseif trajmode == 8 %
     for i = 1:length(m3_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.bounds.phase(4).initialstate.lower(4) = auxdata.Stage3.mTot*m3_vars(i);
@@ -1691,12 +1691,12 @@ elseif mode == 8 %
     
         setup_variations{i}.auxdata.Stage3.mTot = auxdata.Stage3.mTot*m3_vars(i);
     end
-elseif mode == 9 %
+elseif trajmode == 9 %
     for i = 1:length(Isp3_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.Isp3mod = Isp3_vars(i);
     end
-elseif mode == 10 %
+elseif trajmode == 10 %
     for i = 1:length(mSPARTAN_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.m2mod = mSPARTAN_vars(i);
@@ -1710,7 +1710,7 @@ elseif mode == 10 %
     
     
     end
-elseif mode == 11 %
+elseif trajmode == 11 %
     for i = 1:length(mFuel_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.bounds.phase(2).initialstate.lower(9) = Stage2.Initial.mFuel*mFuel_vars(i);
@@ -1726,7 +1726,7 @@ elseif mode == 11 %
         setup_variations{i}.bounds.phase(1).finalstate.upper(3) = setup.bounds.phase(1).finalstate.upper(3) + Stage2.Initial.mFuel*(mFuel_vars(i)-1);
     
     end
-elseif mode == 77
+elseif trajmode == 77
     
 
     temperature_mods = [0 0; 1 0; 0 1; 1 1]; %this indicates minimum or maximum in temperature at the ground and stratopause for each case
@@ -1806,7 +1806,7 @@ end
 for j = 1:length(setup_variations)
 disp(['Starting Setup Variation ',num2str(j)])
 
-if mode == 1000 || mode == 77
+if trajmode == 1000 || trajmode == 77
     %% Aerodynamic Data
         % Call aerodynamic importer and interpolator if doing hypercube
         % analysis
@@ -1886,7 +1886,7 @@ end
 output{j} = output_store{index};
 
 % Clear output store to save memory and prevent write issues
-if mode ~= 1
+if trajmode ~= 1
 clear output_store
 end
 
@@ -1904,8 +1904,10 @@ Plotter(output,auxdata,auxdata.mode,auxdata.returnMode,auxdata.namelist,M_englis
 
 
 
-clear all
-% end
+
+ end
+ clear all
+end
 
 
 %% =========================================================================
