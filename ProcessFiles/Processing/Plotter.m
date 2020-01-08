@@ -1221,10 +1221,10 @@ movefile(strcat('FirstStage',namelist{j},'.png'),sprintf('../ArchivedResults/%s'
 %% Save Flow Properties and Heating Conditions
 % Mach, alpha, altitude, St forebody, St shroud, St wing, St tail
 StantonArray = dlmread('stantons.dat');
-StInterp_forebody = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,4));
-StInterp_shroud = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,5));
-StInterp_wing = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,6));
-StInterp_tail = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,7));
+StInterp_forebody = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,4), 'linear', 'nearest');
+StInterp_shroud = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,5), 'linear', 'nearest');
+StInterp_wing = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,6), 'linear', 'nearest');
+StInterp_tail = scatteredInterpolant(StantonArray(:,1),StantonArray(:,2),StantonArray(:,3),StantonArray(:,7), 'linear', 'nearest');
 
 St_forebody = StInterp_forebody([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
 St_shroud = StInterp_shroud([M1'; M21;M22],rad2deg([alpha1';alpha21;alpha22]),[alt1'; alt21; alt22]);
@@ -1238,8 +1238,8 @@ movefile(strcat('FlowProps',namelist{j}),sprintf('../ArchivedResults/%s',strcat(
 
 
 StantonArray3 = dlmread('stantons-3rd.dat');
-StInterp_cone = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,4));
-StInterp_body = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,6));
+StInterp_cone = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,4), 'linear', 'nearest');
+StInterp_body = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,6), 'linear', 'nearest');
 St_cone = StInterp_cone(M3,rad2deg(aoa3),alt3);
 St_body = StInterp_body(M3,rad2deg(aoa3),alt3);
 
@@ -1263,7 +1263,7 @@ v13 = M13.*c13;
 rho13 = P13./(287*T13);
 
 
-FlowProps3 = [time3 alt3 M3 T03 P03 rho03 M13 T13 P13 rho13 v13 zeros(length(time3),1) zeros(length(time3),1) zeros(length(time3),1) St_cone St_body];
+FlowProps3 = [time3-time3(1) alt3 M3 T03 P03 rho03 M13 T13 P13 rho13 v13 zeros(length(time3),1) zeros(length(time3),1) zeros(length(time3),1) St_cone St_body];
 dlmwrite(strcat('FlowProps3',namelist{j}),['time(s) ' 'altitude(m) ' 'Mach ' 'IncomingAirTemp(K)' ' IncomingAirPressure(Pa)' ' IncomingAirdensity(kg/m^3)' ' Machno.AfterShock' ' TemperatureAfterShock(K)'  ' PressureAfterShock(Pa)' ' DensityAfterShock(kg/m^3)' ' VelocityAfterShock(m/s)' ' heatingrate(w/m^2)' ' heatingrateLE(w/m^2)' ' Phase(first-second-return)'  ' St_nose' ' St_body'],'');   
 dlmwrite(strcat('FlowProps3',namelist{j}),FlowProps3,'-append','delimiter',' ');
 movefile(strcat('FlowProps3',namelist{j}),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
@@ -1428,17 +1428,22 @@ dExergy_3_exo = mpayload*(v3exo_coordchange+dvtot3)^2/2 - mpayload*v3exo_coordch
 dExergy_3 = dExergy_3_atm(end) + dExergy_3_exo;
 %only use heating value for RP-1 (fuel)
 Exergy_tot3 = (H_RP1*rat_RP1)*(auxdata.Stage3.mTot-m3_4); % Total available energy from fuel
+Exergy_tot3_atm = (H_RP1*rat_RP1)*(m3(1) - m3(end) + hs.mHS); % Total available energy from fuel in atmosphere
+
 eff_Exergy_3 = 1 - (Exergy_tot3 - dExergy_3)/(Exergy_tot3);
+eff_Exergy_3_atm = 1 - (Exergy_tot3_atm - dExergy_3_atm)/(Exergy_tot3_atm);
 
 % energy used to accelerate and lift third stage structural mass
 W_3_atm = (m3_4-mpayload)*v3exo(end)^2/2-(m3_4-mpayload)*v3(1)^2/2 + cumtrapz([alt3+6370000; altexo'+6370000],(m3_4-mpayload)*9.81.*(6370000./([alt3+6370000; altexo'+6370000]).^2)); % work done accelerating the third stage structural mass
 
 W_3_exo = (m3_4-mpayload)*(v3exo_coordchange+dvtot3)^2/2 - (m3_4-mpayload)*v3exo_coordchange^2/2 - ((altexo(end))*(m3_4-mpayload)*9.81.*(6370000./(altexo(end)+6370000)).^2) + ((566890)*(m3_4-mpayload)*9.81.*(6370000./(566890+6370000)).^2);
+% 
+% W_3_pc = (W_3_atm+W_3_exo)/(Exergy_tot3)*100;
 
-W_3_pc = (W_3_atm+W_3_exo)/(Exergy_tot3)*100;
+W_3_pc = (W_3_atm(end))/(Exergy_tot3_atm)*100;
 
 W_D3 = cumtrapz(time3,v3.*D3); % work done to overcome drag
-W_D3_pc  = W_D3(end)/(Exergy_tot3)*100;
+W_D3_pc  = W_D3(end)/(Exergy_tot3_atm)*100;
 % work to accelerate fuel mass
 % P_3 = T3.*v3;% propulsive power
 % W_P3 = cumtrapz(time3,P_3); % Propulsive work
@@ -1446,13 +1451,19 @@ W_D3_pc  = W_D3(end)/(Exergy_tot3)*100;
 % P_loss3_pc  = P_loss3(end)/(Exergy_tot3)*100*100;
 
 
-W_mF3 = cumtrapz(v3,m3-m3_4-hs.mHS.*v3) + cumtrapz((alt3+6370000),(m3-m3_4-hs.mHS)*9.81.*(6370000./(alt3+6370000)).^2); % work done accelerating and lifting fuel mass (before heat shield)
-W_mF3_pc  = W_mF3(end)/(Exergy_tot3)*100;
+W_mF3 = cumtrapz(v3,(m3-m3_4-hs.mHS).*v3) + cumtrapz((alt3+6370000),(m3-m3_4-hs.mHS)*9.81.*(6370000./(alt3+6370000)).^2); % work done accelerating and lifting fuel mass (before heat shield)
+W_mF3_pc  = W_mF3(end)/(Exergy_tot3_atm)*100;
 
-HT_loss_pc =  ((H_RP1*rat_RP1)*(m3(end)-m3_4) - dExergy_3_exo -W_3_exo/(Exergy_tot3)*100)/Exergy_tot3*100;% energy lost during hohmann transfer
+W_HS3_pc = (hs.mHS.*hs.v^2 - hs.mHS.*v3(1)^2 - (alt3(1)+6370000)*(m3_4-mpayload)*9.81.*(6370000./(altexo(end)+6370000)).^2 + (hs.alt+6370000)*(m3_4-mpayload)*9.81.*(6370000./(hs.alt+6370000)).^2)/(Exergy_tot3_atm)*100; %work needed to accelerate and lift heat shield
+% P_loss3_pc  = 100 - dExergy_3/(Exergy_tot3)*100 - W_mF3_pc - W_D3_pc - HT_loss_pc - W_HS3_pc - W_3_pc ;  % in atmosphere propulsive losses
+% P_loss3_pc  = 100 - dExergy_3/(Exergy_tot3)*100 - W_mF3_pc - W_D3_pc - W_HS3_pc - W_3_pc ;  % propulsive losses
+P_loss3_pc  = 100 - dExergy_3_atm(end)/(Exergy_tot3_atm)*100 - W_mF3_pc - W_D3_pc - W_HS3_pc - W_3_pc ;  % in atmosphere propulsive losses
 
-W_HS3_pc = (hs.mHS.*hs.v^2 - hs.mHS.*v3(1)^2 - (alt3(1)+6370000)*(m3_4-mpayload)*9.81.*(6370000./(altexo(end)+6370000)).^2 + (hs.alt+6370000)*(m3_4-mpayload)*9.81.*(6370000./(hs.alt+6370000)).^2)/(Exergy_tot3)*100; %work needed to accelerate and lift heat shield
-P_loss3_pc  = 100 - dExergy_3/(Exergy_tot3)*100 - W_mF3_pc - W_D3_pc - HT_loss_pc - W_HS3_pc - W_3_pc ;  % in atmosphere propulsive losses
+
+% HT_loss_pc =  ((H_RP1*rat_RP1)*(m3(end)-m3_4) - dExergy_3_exo -W_3_exo)/Exergy_tot3*100;% all energy lost during hohmann transfer
+HT_exergy = (H_RP1*rat_RP1)*(m3(end)-m3_4); % Fuel exergy available during hohman transfer
+HT_loss_pc =  ((H_RP1*rat_RP1)*(m3(end)-m3_4) - dExergy_3_exo)/HT_exergy*100;% all energy lost during hohmann transfer
+
 
 %Calculate energy wasted at each staging manoeuvre
 % stage_dEx1 = (m1(end)-auxdata.Stage2.mStruct-mFuel21(1)-auxdata.Stage3.mTot)*v1(end)^2/2 + alt1(end)*(m1(end)-auxdata.Stage2.mStruct-mFuel21(1)-auxdata.Stage3.mTot)*9.81.*(6370000./(alt1(end)+6370000)).^2;
@@ -1581,7 +1592,7 @@ dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\Wsecond', namelist{j},re
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\PlosssecondCombined', namelist{j},returnparam ,'}{ ', num2str(P_loss21_pc(end)+W_mF21_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 if auxdata.returnMode ==1
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WDreturn', namelist{j},returnparam ,'}{ ', num2str(W_D22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
-dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\PlossreturnCombined', namelist{j},returnparam ,'}{ ', num2str(P_loss22_pc(end)+W_mF22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
+dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\PlossreturnCombined', namelist{j},returnparam ,'}{ ', num2str(P_loss22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WmFreturn', namelist{j},returnparam ,'}{ ', num2str(W_mF22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\Wreturn', namelist{j},returnparam ,'}{ ', num2str(W_22_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 end
@@ -1599,7 +1610,9 @@ dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdcircm', namelist{j}
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdmFuel', namelist{j},returnparam ,'}{ ', num2str(auxdata.Stage3.mTot-m3_4,'%.1f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirddExergy', namelist{j},returnparam ,'}{ ', num2str(dExergy_3/10^9,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirddExergyEff', namelist{j},returnparam ,'}{ ', num2str(eff_Exergy_3*100,'%.3f') , '}'), '-append','delimiter','','newline', 'pc');
-dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdEnergy', namelist{j},returnparam ,'}{ ', num2str((Exergy_tot3)/10^9,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
+dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirddExergyEffAtm', namelist{j},returnparam ,'}{ ', num2str(eff_Exergy_3_atm(end)*100,'%.3f') , '}'), '-append','delimiter','','newline', 'pc');
+dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\thirdEnergy', namelist{j},returnparam ,'}{ ', num2str((Exergy_tot3_atm)/10^9,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
+
 
 
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WDthree', namelist{j},returnparam ,'}{ ', num2str(W_D3_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
@@ -1608,7 +1621,8 @@ dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WmFthree', namelist{j},r
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\HTloss', namelist{j},returnparam ,'}{ ', num2str(HT_loss_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\WHSthree', namelist{j},returnparam ,'}{ ', num2str(W_HS3_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\Plossthree ', namelist{j},returnparam ,'}{ ', num2str(P_loss3_pc(end) ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
-
+dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\HTExergy ', namelist{j},returnparam ,'}{ ', num2str(HT_exergy/10^9  ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
+dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\HTeff ', namelist{j},returnparam ,'}{ ', num2str(dExergy_3_exo/HT_exergy*100 ,'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 dlmwrite(strcat('LatexInputs.txt'),strcat('\newcommand{\PlossthreeCombined ', namelist{j},returnparam ,'}{ ', num2str(P_loss3_pc(end)+ W_mF3_pc(end)+HT_loss_pc(end),'%.2f') , '}'), '-append','delimiter','','newline', 'pc');
 
 
@@ -1817,7 +1831,7 @@ else
 end
 % zoom(30) 
 %% Plot Visualisation of Net ISP & other performance
-plotperform = 'yes'
+plotperform = 'no'
 
 if strcmp(plotperform,'yes')
     if auxdata.returnMode == 0 && auxdata.mode == 1
@@ -2296,17 +2310,8 @@ end
 
 %% Create latex table
 
-
-
-if auxdata.mode == 10
-RegressionList = [-5 -2.5 0 2.5 5];
-elseif auxdata.mode == 2 || auxdata.mode == 7
-RegressionList = [-20 -10 0 10 20];  
-elseif auxdata.mode == 5
-RegressionList = [-80 -50 0 7 15]    ;
-else
 RegressionList = [-10 -5 0 5 10];
-end
+
 
 if mode == 1 || mode == 90
 dlmwrite(strcat('LatexInputs.txt'),'\begin{tabular}{l c } ', '-append' , 'delimiter','','newline', 'pc')

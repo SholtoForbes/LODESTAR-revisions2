@@ -10,6 +10,7 @@ mode = auxdata.mode;
 alt = z(1,:);   %Height
 v = z(2,:);   %Velocity
 m = z(3,:);   %Mass
+% m = z(3,:) - 75.5;   %Mass MODIFIED FOR THIRD STAGE REDUCED HEAT SHIELD
 gamma = z(4,:);
 alpha = z(5,:);
 zeta = z(6,:);

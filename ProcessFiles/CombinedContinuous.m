@@ -60,6 +60,13 @@ phaseout(2).dynamics  = [altdot21, londot21, latdot21, vdot21, fpadot21, azidot2
 
 phaseout(2).path = [q21,heating_rate21*10^-3] ;
 
+% if auxdata.mode == 1 % for q constrainted in middle
+% % phaseout(2).integrand = (q21-50000).^2/50000;
+% phaseout(2).integrand = (q21-50000).^2/50000+abs(aoadot21)*10;
+% % 
+% phaseout(2).integrand(M21<6.5)=0;
+% phaseout(2).integrand(M21>8)=0;
+% end
 if auxdata.mode == 90
 % phaseout(2).integrand = (q21-50000).^2/50000;
 phaseout(2).integrand = (q21-50000).^2/50000+abs(aoadot21)*10;

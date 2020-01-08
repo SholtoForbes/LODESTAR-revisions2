@@ -14,6 +14,7 @@ A = auxdata.A; % reference area (m^2)
 
 if ThirdStage == 1
 m = auxdata.Stage2.mStruct+mFuel+auxdata.Stage3.mTot; 
+% m = auxdata.Stage2.mStruct+mFuel+auxdata.Stage3.mTot - 75.5;  % MODIFIED THIRD STAGE FOR REDUCED HEAT SHIELD
 else
 m = auxdata.Stage2.mStruct+mFuel;
 end
@@ -251,7 +252,7 @@ v_1_tip = M_1_tip.*c_1_tip;
 % From Conceptual Shape Optimization of Entry Vehicles, Dirkx & Mooj & NASA
 % lecture
 
-%using hot wall correction
+%using cold wall approximation
 
 kappa = 1.83e-4; % sutton-graves, from nDirkx
 Rn = 0.05; %effective nose radius (m) 

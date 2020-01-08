@@ -49,6 +49,8 @@ end
 %% Define Vehicle Properties
 % mHS = 130.9; % Heat Shield Mass
 mHS = 124.6; % Heat Shield Mass
+% mHS = 49.1; % Heat Shield Mass MODIFIED HEAT SHIELD FOR PULLUP
+
 hs.mHS = mHS;
 
 mEng = 78; %Kestrel. Mass Increased.

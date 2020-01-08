@@ -75,8 +75,12 @@ if input.auxdata.mode == 90
 output.objective = -mpayload/10+cost_q;
 % output.objective = -mpayload+cost_q;
 else
+    
+%     cost_q = input.phase(2).integral; % for q constrainted in middle
+% output.objective = -mpayload/10+cost_q;% for q constrainted in middle
+% output.objective = -mpayload+cost_q;% for q constrainted in middle
 
-output.objective = -mpayload;
+output.objective = -mpayload; % normal
 
 % output.objective =-input.phase(2).finalstate(4);
 end

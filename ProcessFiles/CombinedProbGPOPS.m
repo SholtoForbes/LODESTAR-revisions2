@@ -31,6 +31,8 @@ clc
 % mode 13: Boat tail lift - not implemente
 % mode 14: Boat tail drag - not implemented
 
+% mode 15: heat limited, multiple
+
 % mode 90: const q
 % mode 99: interaction mode
 % mode 1000: Latin Hypercube
@@ -45,8 +47,8 @@ clc
 % 
 % returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 
-for trajmode = [1000]
- for returnMode = [1]%
+for trajmode = [1 2]
+ for returnMode = [0]%
 
         auxdata.mode = trajmode;
         auxdata.returnMode = returnMode;
@@ -88,6 +90,7 @@ namelist{1} = 'Constq';
 end
 % Mode 2
 q_vars = [45000 47500 50000 52500 55000]  % Set dynamic pressures to be investigated
+% q_vars = [45000.1 47500.1 50000 52500.1 55000.1]  % Set dynamic pressures to be investigated
 if trajmode == 2
 
 %     for i = 1:length(q_vars)
@@ -214,6 +217,18 @@ end
 
 end
 
+% heatingLimit_vals = [10000 1600 1500 1400 1300]  
+% heatingLimit_vals = [1600 1600 1600 1600 1600] 
+heatingLimit_vals = [10000 1700 1600.1 1500.1 1400]  
+if trajmode == 15
+if returnMode == 1
+namelist = {'heatLimStandard' 'heatLim1700' 'heatLim1600' 'heatLim1500' 'heatLim1400'}
+else
+% namelist = {'heatLimStandardNoReturn' 'heatLim1600NoReturn' 'heatLim1500NoReturn' 'heatLim1400NoReturn' 'heatLim1300NoReturn'}
+end
+
+end
+
 %interactionmode
 if trajmode == 99
  namelist = {};
@@ -224,17 +239,22 @@ if trajmode == 1000
   
 %Uncertainties (%)
 unc.ISP1 = 1.3;
-unc.CL12_subsonic = 16.5;
+% unc.CL12_subsonic = 16.5;
+unc.CL12_subsonic = 17;
 unc.CL12_transonic = 28.7;
-unc.CL12_supersonic = 1.3;
-unc.CD12_subsonic = 20;
-unc.CD12_transonic = 18;
+% unc.CL12_supersonic = 1.3;
+unc.CL12_supersonic = 12;
+% unc.CD12_subsonic = 20;
+unc.CD12_subsonic = 33;
+% unc.CD12_transonic = 18;
+unc.CD12_transonic = 21;
 unc.CD12_supersonic = 11;
 unc.CM12_subsonic = 23;
 unc.CM12_transonic = 67.1;
 unc.CM12_supersonic = 22;
 unc.ISP2 = 25;
 unc.ISP3 = 1.3;
+
 
 CreateCube = 'yes'
 
@@ -1231,6 +1251,10 @@ bounds.phase(2).finaltime.upper = Stage2.Bounds.time(2);
 %         bounds.phase(2).path.lower = [49970];
 %     bounds.phase(2).path.upper = [50030];
 % end
+% if trajmode == 1 % for q constrainted in middle
+% bounds.phase(2).integral.lower = 0;
+% bounds.phase(2).integral.upper = 10000000;
+% end
 if trajmode == 90
 bounds.phase(2).integral.lower = 0;
 bounds.phase(2).integral.upper = 10000000;
@@ -1264,6 +1288,9 @@ guess.phase(2).state(:,9) 	= [Stage2.Initial.mFuel; 100];
 guess.phase(2).control      = [[0;0],[0;0]];
 guess.phase(2).time          = [0;650];
 
+% if trajmode == 1 % for q constrainted in middle
+% guess.phase(2).integral = 0
+% end
 if trajmode == 90
 guess.phase(2).integral = 0
 end
@@ -1726,6 +1753,15 @@ elseif trajmode == 11 %
         setup_variations{i}.bounds.phase(1).finalstate.upper(3) = setup.bounds.phase(1).finalstate.upper(3) + Stage2.Initial.mFuel*(mFuel_vars(i)-1);
     
     end
+elseif trajmode == 15 %
+    for i = 1:length(heatingLimit_vals)  
+        setup_variations{i} = setup;
+        setup_variations{i}.bounds.phase(2).path.upper(2) = heatingLimit_vals(i);
+        setup_variations{i}.bounds.phase(3).path.upper(2) = heatingLimit_vals(i);
+        
+%         setup_variations{i}.guess.phase(2).state(:,4) = [1520+10*i; 2800];
+    end
+    
 elseif trajmode == 77
     
 
@@ -1802,108 +1838,129 @@ elseif trajmode == 77
 end
 
 
+if trajmode ~= 1000
+    for j = 1:length(setup_variations)
+    disp(['Starting Setup Variation ',num2str(j)])
 
-for j = 1:length(setup_variations)
-disp(['Starting Setup Variation ',num2str(j)])
+    if trajmode == 1000 || trajmode == 77
+        %% Aerodynamic Data
+            % Call aerodynamic importer and interpolator if doing hypercube
+            % analysis
 
-if trajmode == 1000 || trajmode == 77
+
+            setup_variations{j}.auxdata = AeroCalc(setup_variations{j}.auxdata);
+
+    end
+
+    for i = 1:num_it
+    setup_par(i) = setup_variations{j};
+    % setup_par(i).nlp.ipoptoptions.maxiterations = 500 + 10*i;
+    setup_par(i).guess.phase(2).state(:,1)   = [24000; 30000 + 2000*i]; % vary altitude guess
+    end
+
+    parfor i = 1:num_it
+
+    output_temp = gpops2(setup_par(i)); % Run GPOPS-2. Use setup for each parallel iteration.
+    % 
+    % % Run forward simulation for comparison between runs
+    % % Extract states
+    % alt22 = output_temp.result.solution.phase(3).state(:,1).';
+    % lon22 = output_temp.result.solution.phase(3).state(:,2).';
+    % lat22 = output_temp.result.solution.phase(3).state(:,3).';
+    % v22 = output_temp.result.solution.phase(3).state(:,4).'; 
+    % gamma22 = output_temp.result.solution.phase(3).state(:,5).'; 
+    % zeta22 = output_temp.result.solution.phase(3).state(:,6).';
+    % alpha22 = output_temp.result.solution.phase(3).state(:,7).';
+    % eta22 = output_temp.result.solution.phase(3).state(:,8).';
+    % mFuel22 = output_temp.result.solution.phase(3).state(:,9).'; 
+    % time22 = output_temp.result.solution.phase(3).time.';
+    % throttle22 = output_temp.result.solution.phase(3).state(:,10).';
+    % 
+    % 
+    % % Return Forward
+    % forward0 = [alt22(1),gamma22(1),v22(1),zeta22(1),lat22(1),lon22(1), mFuel22(1)];
+    % [f_t, f_y] = ode45(@(f_t,f_y) VehicleModelReturn_forward(f_t, f_y,auxdata,ControlInterp(time22,alpha22,f_t),ControlInterp(time22,eta22,f_t),ThrottleInterp(time22,throttle22,f_t)),time22,forward0);
+    % 
+    % error(i) = (f_y(end,6) + lon22(end))^2 + (f_y(end,5) + lat22(end))^2;
+    % error(i) = abs(mFuel22(end) - f_y(end,7));
+
+    input_test = output_temp.result.solution;
+    input_test.auxdata = setup_par(i).auxdata;
+    phaseout_test = CombinedContinuous(input_test);
+    norm_error1 = [];
+    for num = [1:6 9]
+    % norm_error1(num,:) = (cumtrapz(output_temp.result.solution.phase(2).time,phaseout_test(2).dynamics(1:end,num)) + output_temp.result.solution.phase(2).state(1,num)- output_temp.result.solution.phase(2).state(:,num))./(max(output_temp.result.solution.phase(2).state(:,num))-min(output_temp.result.solution.phase(2).state(:,num)));
+    Stage2_int = cumtrapz([output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)],pchip(output_temp.result.solution.phase(2).time,phaseout_test(2).dynamics(1:end,num),[output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)]))';
+    norm_error1(num,:) = (interp1([output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)],Stage2_int,output_temp.result.solution.phase(2).time)+ output_temp.result.solution.phase(2).state(1,num)- output_temp.result.solution.phase(2).state(:,num))./(max(output_temp.result.solution.phase(2).state(:,num))-min(output_temp.result.solution.phase(2).state(:,num)));
+
+    end
+    norm_error2 = [];
+    if returnMode == 1
+    for num = [1:6 9]
+    % norm_error2(num,:) = (cumtrapz(output_temp.result.solution.phase(3).time,phaseout_test(3).dynamics(1:end,num)) + output_temp.result.solution.phase(3).state(1,num)- output_temp.result.solution.phase(3).state(:,num))./(max(output_temp.result.solution.phase(3).state(:,num))-min(output_temp.result.solution.phase(3).state(:,num)));
+    Return_int = cumtrapz([output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)],pchip(output_temp.result.solution.phase(3).time,phaseout_test(3).dynamics(1:end,num),[output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)]))';
+    norm_error2(num,:) = (interp1([output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)],Return_int,output_temp.result.solution.phase(3).time)+ output_temp.result.solution.phase(3).state(1,num)- output_temp.result.solution.phase(3).state(:,num))./(max(output_temp.result.solution.phase(3).state(:,num))-min(output_temp.result.solution.phase(3).state(:,num)));
+
+
+    end
+    else
+     norm_error2 = 0;  
+    end
+    error(i) = max([max(abs(norm_error1)) max(abs(norm_error2))]);
+
+
+    PayloadMass(i) = -output_temp.result.objective;
+
+    output_store{i} = output_temp;
+
+    end
+
+    % [min_error,index] = min(error); % Calculate the result which minimises the chosen error function
+
+    [max_pl,index] = max(PayloadMass);% Calculate the result which maximises payload mass the chosen error function
+
+    output{j} = output_store{index};
+
+    % Clear output store to save memory and prevent write issues
+    if trajmode ~= 1
+    clear output_store
+    end
+
+    % Shut down parallel pool in case some workers have crashed during run
+    poolobj = gcp('nocreate');
+    delete(poolobj);
+
+    end
+elseif trajmode == 1000
+    parfor j = 1:length(setup_variations)
+    disp(['Starting Setup Variation ',num2str(j)])
+
     %% Aerodynamic Data
-        % Call aerodynamic importer and interpolator if doing hypercube
-        % analysis
+    % Call aerodynamic importer and interpolator if doing hypercube
+    % analysis
 
+    setup_variations{j}.auxdata = AeroCalc(setup_variations{j}.auxdata);
 
-        setup_variations{j}.auxdata = AeroCalc(setup_variations{j}.auxdata);
+    setup_variations{j}.guess.phase(2).state(:,1)   = [24000; 30000]; % vary altitude guess
     
-end
-    
-for i = 1:num_it
-setup_par(i) = setup_variations{j};
-% setup_par(i).nlp.ipoptoptions.maxiterations = 500 + 10*i;
-setup_par(i).guess.phase(2).state(:,1)   = [24000; 30000 + 2000*i]; % vary altitude guess
-end
+    % Run 
+    try % THis works even though is says it will error
+        output_temp = gpops2(setup_variations{j}); % Run GPOPS-2. Use setup for each parallel iteration.
+    catch
+        warning('Error in a run')
+        output_temp = [];
+    end
+    output{j} = output_temp;
 
-parfor i = 1:num_it
-  
-output_temp = gpops2(setup_par(i)); % Run GPOPS-2. Use setup for each parallel iteration.
-% 
-% % Run forward simulation for comparison between runs
-% % Extract states
-% alt22 = output_temp.result.solution.phase(3).state(:,1).';
-% lon22 = output_temp.result.solution.phase(3).state(:,2).';
-% lat22 = output_temp.result.solution.phase(3).state(:,3).';
-% v22 = output_temp.result.solution.phase(3).state(:,4).'; 
-% gamma22 = output_temp.result.solution.phase(3).state(:,5).'; 
-% zeta22 = output_temp.result.solution.phase(3).state(:,6).';
-% alpha22 = output_temp.result.solution.phase(3).state(:,7).';
-% eta22 = output_temp.result.solution.phase(3).state(:,8).';
-% mFuel22 = output_temp.result.solution.phase(3).state(:,9).'; 
-% time22 = output_temp.result.solution.phase(3).time.';
-% throttle22 = output_temp.result.solution.phase(3).state(:,10).';
-% 
-% 
-% % Return Forward
-% forward0 = [alt22(1),gamma22(1),v22(1),zeta22(1),lat22(1),lon22(1), mFuel22(1)];
-% [f_t, f_y] = ode45(@(f_t,f_y) VehicleModelReturn_forward(f_t, f_y,auxdata,ControlInterp(time22,alpha22,f_t),ControlInterp(time22,eta22,f_t),ThrottleInterp(time22,throttle22,f_t)),time22,forward0);
-% 
-% error(i) = (f_y(end,6) + lon22(end))^2 + (f_y(end,5) + lat22(end))^2;
-% error(i) = abs(mFuel22(end) - f_y(end,7));
-
-input_test = output_temp.result.solution;
-input_test.auxdata = setup_par(i).auxdata;
-phaseout_test = CombinedContinuous(input_test);
-norm_error1 = [];
-for num = [1:6 9]
-% norm_error1(num,:) = (cumtrapz(output_temp.result.solution.phase(2).time,phaseout_test(2).dynamics(1:end,num)) + output_temp.result.solution.phase(2).state(1,num)- output_temp.result.solution.phase(2).state(:,num))./(max(output_temp.result.solution.phase(2).state(:,num))-min(output_temp.result.solution.phase(2).state(:,num)));
-Stage2_int = cumtrapz([output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)],pchip(output_temp.result.solution.phase(2).time,phaseout_test(2).dynamics(1:end,num),[output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)]))';
-norm_error1(num,:) = (interp1([output_temp.result.solution.phase(2).time(1):0.1:output_temp.result.solution.phase(2).time(end)],Stage2_int,output_temp.result.solution.phase(2).time)+ output_temp.result.solution.phase(2).state(1,num)- output_temp.result.solution.phase(2).state(:,num))./(max(output_temp.result.solution.phase(2).state(:,num))-min(output_temp.result.solution.phase(2).state(:,num)));
-
-end
-norm_error2 = [];
-if returnMode == 1
-for num = [1:6 9]
-% norm_error2(num,:) = (cumtrapz(output_temp.result.solution.phase(3).time,phaseout_test(3).dynamics(1:end,num)) + output_temp.result.solution.phase(3).state(1,num)- output_temp.result.solution.phase(3).state(:,num))./(max(output_temp.result.solution.phase(3).state(:,num))-min(output_temp.result.solution.phase(3).state(:,num)));
-Return_int = cumtrapz([output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)],pchip(output_temp.result.solution.phase(3).time,phaseout_test(3).dynamics(1:end,num),[output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)]))';
-norm_error2(num,:) = (interp1([output_temp.result.solution.phase(3).time(1):0.1:output_temp.result.solution.phase(3).time(end)],Return_int,output_temp.result.solution.phase(3).time)+ output_temp.result.solution.phase(3).state(1,num)- output_temp.result.solution.phase(3).state(:,num))./(max(output_temp.result.solution.phase(3).state(:,num))-min(output_temp.result.solution.phase(3).state(:,num)));
-
-
-end
-else
- norm_error2 = 0;  
-end
-error(i) = max([max(abs(norm_error1)) max(abs(norm_error2))]);
-
-
-PayloadMass(i) = -output_temp.result.objective;
-
-output_store{i} = output_temp;
-
-end
-
-% [min_error,index] = min(error); % Calculate the result which minimises the chosen error function
-
-[max_pl,index] = max(PayloadMass);% Calculate the result which maximises payload mass the chosen error function
-
-output{j} = output_store{index};
-
-% Clear output store to save memory and prevent write issues
-if trajmode ~= 1
-clear output_store
-end
-
-% Shut down parallel pool in case some workers have crashed during run
-poolobj = gcp('nocreate');
-delete(poolobj);
-
+    end
+    % Shut down parallel pool in case some workers have crashed during run
+    poolobj = gcp('nocreate');
+    delete(poolobj);
 end
 
 %% Process Results
 
 Plotter(output,auxdata,auxdata.mode,auxdata.returnMode,auxdata.namelist,M_englist,T_englist,engine_data,MList_EngineOn,AOAList_EngineOn,mRocket,mSpartan,mFuel,h0,v0,bounds);
-
-
-
-
-
 
  end
  clear all
