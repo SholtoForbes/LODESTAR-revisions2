@@ -105,8 +105,8 @@ while gamma(i) >= 0 && Alt(end) > 20000 && Alt(end)
 
 Kn(i) = ThirdStageHAViscous(T0(i),P0(i), M(i),L_ThirdStage);
 
-CD(i)  = auxdata.interp.D3interp(M(i),rad2deg(Alpha),Alt(i));
-CL(i)  = auxdata.interp.L3interp(M(i),rad2deg(Alpha),Alt(i));
+CD(i)  = auxdata.interp.D3interp(M(i),rad2deg(Alpha),Alt(i))*auxdata.Cd3mod;
+CL(i)  = auxdata.interp.L3interp(M(i),rad2deg(Alpha),Alt(i))*auxdata.CL3mod;
 
     D(i) = 1/2*rho(i)*(v(i)^2)*A*CD(i);
     L(i) = 1/2*rho(i)*(v(i)^2)*A*CL(i); % Aerodynamic lift

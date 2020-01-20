@@ -209,7 +209,7 @@ else
 
 % Calculate aerodynamic forces
 D  = 1./2.*rho.*(v.^2).*A.*CD *auxdata.Cd3mod;
-L  = 1./2.*rho.*(v.^2).*A.*CL ; % Aerodynamic lift
+L  = 1./2.*rho.*(v.^2).*A.*CL *auxdata.CL3mod; % Aerodynamic lift
 % N  = 1./2.*rho.*(v.^2).*A.*CN ;
 end
    
