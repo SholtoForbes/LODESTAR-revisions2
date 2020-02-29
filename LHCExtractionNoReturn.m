@@ -1,5 +1,5 @@
 4% Extract LHC stuff 
-cd ./ArchivedResults/LHC-Updated
+cd ./ArchivedResults/LHC-NoReturn
 clear all
 %Uncertainties (%)
 unc.Isp1 = 1.3;
@@ -21,7 +21,7 @@ cd ./LHC1
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,3) isequal(i,6) isequal(i,7)])
+    if any([isequal(i,13) isequal(i,14) isequal(i,15)  isequal(i,18)]) || i>15
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -43,7 +43,7 @@ cd ./LHC2
 load output.mat
 
 for i = 1:length(output)
-if any([isequal(i,2) isequal(i,3) isequal(i,6)])
+if any([isequal(i,12) isequal(i,15)])  || i>15
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -65,7 +65,7 @@ cd ./LHC3
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,2) isequal(i,5)])
+if  i>5
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -78,7 +78,7 @@ for i = 1:length(output)
         Isp3s(n) = output{i}.result.setup.auxdata.Isp3mod; 
        
         n = n+1
-    end
+end
 end
 
 cd ..\
@@ -87,7 +87,7 @@ cd ./LHC4
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,3)])
+    if any([isequal(i,11) isequal(i,12)])  || i>13
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -109,7 +109,7 @@ cd ./LHC5
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,2)])
+    if n>=100  || i>6
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -131,7 +131,7 @@ cd ./LHC6
 load output.mat
 
 for i = 1:length(output)
- if any([isequal(i,5) isequal(i,10)])
+ if n>=100  || i>4
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -153,7 +153,7 @@ cd ./LHC7
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,9) isequal(i,10)])
+    if n>=100  || i>10
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -175,7 +175,7 @@ cd ./LHC8
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,3)])
+    if n>=100  || i>10
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -197,7 +197,7 @@ cd ./LHC9
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,7)])
+    if n>=100  || i>5
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -219,7 +219,7 @@ cd ./LHC10
 load output.mat
 
 for i = 1:length(output)
-    if any([isequal(i,6) isequal(i,7) isequal(i,8) isequal(i,10)])
+    if any([isequal(i,1)]) || n>=100  || i>5
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -241,7 +241,7 @@ cd ./LHC11
 load output.mat
 
 for i = 1:length(output)
- if any([isequal(i,1)])
+ if n>=100  || i>8
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -263,7 +263,9 @@ cd ./LHC12
 load output.mat
 
 for i = 1:length(output)
-
+if any([isequal(i,9)]) || n>=100   || i>9% this makes 100 runs that are analysed
+    % Do nothing if a bad run is selected
+    else
         objVals(n) = abs(output{i}.result.objective);
 
         Isp1s(n) = output{i}.result.setup.auxdata.Isp1mod;
@@ -274,7 +276,7 @@ for i = 1:length(output)
         Isp3s(n) = output{i}.result.setup.auxdata.Isp3mod; 
        
         n = n+1
-
+end
 end
 
 cd ..\
@@ -283,7 +285,7 @@ cd ./LHC13
 load output.mat
 
 for i = 1:length(output)
- if any([isequal(i,2) isequal(i,4) isequal(i,5) isequal(i,6) isequal(i,7) isequal(i,8) isequal(i,9) isequal(i,10)]) % this makes 100 runs that are analysed
+ if n>=100  || i>4
     % Do nothing if a bad run is selected
     else
         objVals(n) = abs(output{i}.result.objective);
@@ -301,7 +303,27 @@ end
 
 cd ..\
 
+cd ./LHC14
+load output.mat
 
+for i = 1:length(output)
+ if n>=100  || i>10
+    % Do nothing if a bad run is selected
+    else
+        objVals(n) = abs(output{i}.result.objective);
+
+        Isp1s(n) = output{i}.result.setup.auxdata.Isp1mod;
+        CLs(n) = output{i}.result.setup.auxdata.CL12_subsonicmod;
+        CDs(n) = output{i}.result.setup.auxdata.CD12_subsonicmod;
+        CMs(n) = output{i}.result.setup.auxdata.Cm12_subsonicmod;
+        Isp2s(n) = output{i}.result.setup.auxdata.Isp2mod;
+        Isp3s(n) = output{i}.result.setup.auxdata.Isp3mod; 
+       
+        n = n+1
+ end
+end
+
+cd ..\
 
 histogram(objVals,7)
 

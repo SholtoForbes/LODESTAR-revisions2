@@ -1238,11 +1238,25 @@ movefile(strcat('FlowProps',namelist{j}),sprintf('../ArchivedResults/%s',strcat(
 
 
 StantonArray3 = dlmread('stantons-3rd.dat');
-StInterp_cone = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,4), 'linear', 'nearest');
-StInterp_body = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,6), 'linear', 'nearest');
-St_cone = StInterp_cone(M3,rad2deg(aoa3),alt3);
-St_body = StInterp_body(M3,rad2deg(aoa3),alt3);
+StInterp_cone = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,4), 'linear', 'linear');
+StInterp_body = scatteredInterpolant(StantonArray3(:,1),StantonArray3(:,2),StantonArray3(:,3),StantonArray3(:,6), 'linear', 'linear');
 
+[MGrid_temp,AoAGrid_temp,altGrid_temp] = ndgrid(unique(StantonArray3(:,1)),unique(StantonArray3(:,2)),unique(StantonArray3(:,3)));
+
+STGrid_temp1 = StInterp_cone(MGrid_temp,AoAGrid_temp,altGrid_temp);
+STGrid_temp2 = StInterp_body(MGrid_temp,AoAGrid_temp,altGrid_temp);
+
+% St_cone = StInterp_cone(M3,rad2deg(aoa3),alt3);
+% St_body = StInterp_body(M3,rad2deg(aoa3),alt3);
+
+STGridded_temp1 = griddedInterpolant(MGrid_temp,AoAGrid_temp,altGrid_temp,STGrid_temp1,'spline');
+STGridded_temp2 = griddedInterpolant(MGrid_temp,AoAGrid_temp,altGrid_temp,STGrid_temp2,'spline');
+
+St_cone = STGridded_temp1(M3,rad2deg(aoa3),alt3);
+St_body = STGridded_temp2(M3,rad2deg(aoa3),alt3);
+
+% St_cone = interp3(MGrid_temp,AoAGrid_temp,altGrid_temp,STGrid_temp1,M3,rad2deg(aoa3),alt3,'spline');
+% St_body = interp3(MGrid_temp,AoAGrid_temp,altGrid_temp,STGrid_temp2,M3,rad2deg(aoa3),alt3,'spline');
 
 shockdata = dlmread('ShockMat3');
 [MList_EngineOn,AOAList_EngineOn] = ndgrid(unique(shockdata(:,1)),unique(shockdata(:,2)));

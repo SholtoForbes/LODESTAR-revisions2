@@ -42,13 +42,15 @@ clc
 
 % mode 77: atmospheric varation study
 
+% Mode 44, variations in return drag
+
 % trajmode = 1
 % 
 % 
 % returnMode = 1% Flag for setting the return of the SPARTAN. 0 = not constrained (no return), 1 = constrained (return)
 
-for trajmode = [1000]
- for returnMode = [0]%
+for trajmode = [44]
+ for returnMode = [1]%
 
         auxdata.mode = trajmode;
         auxdata.returnMode = returnMode;
@@ -62,7 +64,9 @@ auxdata.vCdmod = 1;
 auxdata.m3mod = 1;
 auxdata.Isp3mod = 1;
 auxdata.Cd3mod = 1;
+auxdata.CL3mod = 1;
 auxdata.m2mod = 1;
+auxdata.returnCdmod = 1;
 
 addpath('.\Processing\num2words')
 
@@ -119,6 +123,20 @@ end
 % Mode 4
 Cd_vars = [0.9 0.95 1 1.05 1.1] 
 if trajmode == 4
+
+%     for i = 1:length(Cd_vars)
+%         namelist{i} = ['Cd' num2words(Cd_vars(i)*100) '%'];
+%     end 
+if returnMode == 1
+namelist = {'CdNinety' 'CdNinetyFive' 'CdStandard' 'CdOneHundredFive' 'CdOneHundredTen'}
+else
+namelist = {'CdNinetyNoReturn' 'CdNinetyFiveNoReturn' 'CdStandardNoReturn' 'CdOneHundredFiveNoReturn' 'CdOneHundredTenNoReturn'}
+end
+end
+
+% Mode 44
+returnCd_vars = [0.9 0.95 1 1.05 1.1] 
+if trajmode == 44
 
 %     for i = 1:length(Cd_vars)
 %         namelist{i} = ['Cd' num2words(Cd_vars(i)*100) '%'];
@@ -268,8 +286,8 @@ unc.ISP3 = 1.3;
 CreateCube = 'yes'
 
 if strcmp(CreateCube,'yes')
-Hypercube = lhsdesign(20,6);
-Hypercube = [[1:20]' , Hypercube]; %include case numbers
+Hypercube = lhsdesign(10,6);
+Hypercube = [[1:10]' , Hypercube]; %include case numbers
 % Hypercube = lhsdesign(1,6); % For q variations with perormance variation
 % Hypercube = [1 , Hypercube]; %include case numbers
 dlmwrite('LHC',Hypercube,'delimiter',' ');
@@ -1666,12 +1684,17 @@ if trajmode == 1000
 end
 
 % if trajmode == 1000 % For use with hypercube of 1, for q variations study with varied performance 
-%     namelist = {'qFortyFiveNoReturn' 'qFortySevenNoReturn' 'qStandardNoReturn' 'qFiftyTwoNoReturn' 'qFiftyFiveNoReturn'}
-%     for i = 1:length(q_vars)  
+%     namelist = {'cdNinetyFive' 'cdNinetySevenFive' 'cdOneHundred' 'cdOneHundredTwoFive' 'cdOneHundredFive'}
+% %     namelist = {'qFortyFiveNoReturn' 'qFortySevenNoReturn' 'qStandardNoReturn' 'qFiftyTwoNoReturn' 'qFiftyFiveNoReturn'}
+% %     for i = 1:length(q_vars)  
+% %         setup_variations{i} = setup_variations{1};
+% %         setup_variations{i}.bounds.phase(1).path.upper(1) = q_vars(i);
+% %         setup_variations{i}.bounds.phase(2).path.upper(1) = q_vars(i);
+% %         setup_variations{i}.bounds.phase(3).path.upper(1) = q_vars(i);
+%     for i = 1:length(Cd_vars)  
 %         setup_variations{i} = setup_variations{1};
-%         setup_variations{i}.bounds.phase(1).path.upper(1) = q_vars(i);
-%         setup_variations{i}.bounds.phase(2).path.upper(1) = q_vars(i);
-%         setup_variations{i}.bounds.phase(3).path.upper(1) = q_vars(i);
+%         setup_variations{i}.auxdata.Cdmod = Cd_vars(i);
+% 
 %     end
 % end
 
@@ -1705,6 +1728,11 @@ elseif trajmode == 4
     for i = 1:length(Cd_vars)  
         setup_variations{i} = setup;
         setup_variations{i}.auxdata.Cdmod = Cd_vars(i);
+    end
+    elseif trajmode == 44
+    for i = 1:length(returnCd_vars)  
+        setup_variations{i} = setup;
+        setup_variations{i}.auxdata.returnCdmod = returnCd_vars(i);
     end
     
 elseif trajmode == 5 % not yet implemented
@@ -1864,7 +1892,7 @@ elseif trajmode == 77
     end
 end
 
-
+% if trajmode == 1000 % for q variations with a hypercube of 1
 if trajmode ~= 1000
     for j = 1:length(setup_variations)
     disp(['Starting Setup Variation ',num2str(j)])

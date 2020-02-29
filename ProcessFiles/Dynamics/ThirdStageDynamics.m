@@ -5,7 +5,7 @@ mode = auxdata.mode;
 
 % mHS = 130.9; % Heat Shield Mass. BASELINE
 mHS = 124.6; % Heat Shield Mass
-% mHS = 49.1; % MODIFIED Heat Shield Mass for pull-up study
+% mHS = 46.2; % MODIFIED Heat Shield Mass for pull-up study
 
 % Calculate approximate fuel mass for CG variation.
 % mFuel = m - (auxdata.Stage3.mTot - mHS)*0.09 - mHS;

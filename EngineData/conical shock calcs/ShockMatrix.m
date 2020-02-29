@@ -4,7 +4,7 @@
 hangle = 10.3885; % cone half angle (deg) % 10.3885 for third stage
 
 mat = [];
-for i = 9:.5:17
+for i = 7:.5:8.5
     for j = 0:.5:10
         delete('input')
         delete('output')

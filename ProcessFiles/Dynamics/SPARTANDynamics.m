@@ -14,7 +14,7 @@ A = auxdata.A; % reference area (m^2)
 
 if ThirdStage == 1
 m = auxdata.Stage2.mStruct+mFuel+auxdata.Stage3.mTot; 
-% m = auxdata.Stage2.mStruct+mFuel+auxdata.Stage3.mTot - 75.5;  % MODIFIED THIRD STAGE FOR REDUCED HEAT SHIELD
+% m = auxdata.Stage2.mStruct+mFuel+auxdata.Stage3.mTot - 78.4;  % MODIFIED THIRD STAGE FOR REDUCED HEAT SHIELD
 else
 m = auxdata.Stage2.mStruct+mFuel;
 end
@@ -201,6 +201,10 @@ if mode == 1000
     Cd(M0>=1) = Cd(M0>=1) + Cd(M0>=1).*(auxdata.CD12_subsonicmod.*(1-sigmf(M0(M0>=1),[100,0.8])) + auxdata.CD12_transonicmod.*(1-sigmf(M0(M0>=1),[100,1.2])) + auxdata.CD12_supersonicmod.*sigmf(M0(M0>=1),[100,1.2]));
 
     T = Isp.*Fueldt_max.*throttle*9.81 + auxdata.T_spline(mach,rad2deg(alpha),alt/1000)*(auxdata.Isp2mod).*throttle; % If Isp is modified, add portion of total thrust
+end
+
+if mode == 44 && auxdata.returnMode == 1
+    auxdata.cdmod = auxdata.returnCdmod;
 end
 
 %%%% Compute the drag and lift:
