@@ -203,7 +203,7 @@ if mode == 1000
     T = Isp.*Fueldt_max.*throttle*9.81 + auxdata.T_spline(mach,rad2deg(alpha),alt/1000)*(auxdata.Isp2mod).*throttle; % If Isp is modified, add portion of total thrust
 end
 
-if mode == 44 && auxdata.returnMode == 1
+if mode == 44 && ThirdStage == 0
     auxdata.cdmod = auxdata.returnCdmod;
 end
 
