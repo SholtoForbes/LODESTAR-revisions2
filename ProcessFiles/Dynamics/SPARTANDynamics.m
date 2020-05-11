@@ -204,7 +204,7 @@ if mode == 1000
 end
 
 if mode == 44 && ThirdStage == 0
-    auxdata.cdmod = auxdata.returnCdmod;
+    auxdata.Cdmod = auxdata.returnCdmod;
 end
 
 %%%% Compute the drag and lift:

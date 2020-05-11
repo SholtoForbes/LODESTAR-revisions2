@@ -812,10 +812,39 @@ ylabel('Angle of Attack (deg)')
 c=colorbar
 c.Label.String = 'P1/P0';
 
+%% plot fuel dt 
+plotM2 = [5:0.01:9];
+plotAlt = [20000:(45000-20000)/(length(plotM)-1):45000];
+
+[gridM2,gridAlt] =  ndgrid(plotM,plotAlt);
+plotT0 = interp1( auxdata.interp.Atmosphere(:,1),  auxdata.interp.Atmosphere(:,2), gridAlt); 
+plotP0 = interp1(auxdata.interp.Atmosphere(:,1),auxdata.interp.Atmosphere(:,3),gridAlt);
+plotrho0 = interp1(auxdata.interp.Atmosphere(:,1),auxdata.interp.Atmosphere(:,4),gridAlt);
+speedofsoundGrid = interp1(auxdata.interp.Atmosphere(:,1),auxdata.interp.Atmosphere(:,5),gridAlt);
+dynamicPressureGrid = 0.5*plotrho0.*(gridM2.*speedofsoundGrid).^2;
+i=1;
+for AoA = 0:5:10
+[~,wf_temp] = RESTint(gridM2, AoA*ones(size(gridM2)), auxdata,plotT0,plotP0);
+wf_temp(dynamicPressureGrid>50000) = 0;
+fuelFlow{i} = wf_temp; 
+i = i+1;
+end
+
+figure(2192)
+for i = 1:3
+subplot(2,2,i)
+contourf(gridM2,gridAlt/1000,fuelFlow{i},100,'LineColor','none')
+xlabel('M')
+ylabel('Altitude (km)')
+c=colorbar
+colormap jet
+caxis([0 10])
+c.Label.String = 'Fuel Mass Flow Rate (kg/s)';
 end
 
 %%
 [gridM2,gridAoA2] =  ndgrid(plotM,plotT);
+
 
 
 %% ThirdStage
@@ -2236,6 +2265,10 @@ saveas(figure(2210),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num
 set(gcf, 'PaperPositionMode', 'auto');
 print(figure(2210),strcat('returnIsp',namelist{j}),'-dpng');
 movefile(strcat('returnIsp',namelist{j},'.png'),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
+saveas(figure(2192),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))),filesep,strcat('FuelMassFlow',namelist{j},'.fig')]);
+set(gcf, 'PaperPositionMode', 'auto');
+print(figure(2192),strcat('FuelMassFlow',namelist{j}),'-dpng');
+movefile(strcat('FuelMassFlow',namelist{j},'.png'),sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))));
 end
 saveas(figure(2301),[sprintf('../ArchivedResults/%s',strcat(Timestamp,'mode',num2str(mode),num2str(returnMode))),filesep,strcat('GroundTrack',namelist{j},'.fig')]);
 set(gcf, 'PaperPositionMode', 'auto');
@@ -2929,10 +2962,11 @@ set(gca,'xticklabels',[])
 
 
         figure(2110)
-    subplot(4,1,1)
+    subplot(5,1,1)
     hold on
-    title('Altitude (km','FontSize',9);
+    title('Altitude','FontSize',9);
     plot([time21-time21(1)], [alt21]/1000','Color',Colours(j,:),'LineStyle',LineStyleList{j})
+    ylabel('Alt (km)');
 set(gca,'xticklabels',[])
 %     xlim([time3(1) timeexo(end)+time3(end)])
 
@@ -2946,24 +2980,33 @@ set(gca,'xticklabels',[])
 %     xlim([time3(1) timeexo(end)+time3(end)])
 
 
-    subplot(4,1,2)
+    subplot(5,1,2)
     hold on
-    title('Velocity (m/s)','FontSize',9);
+    title('Speed','FontSize',9);
     plot([time21-time21(1)],[v21],'Color',Colours(j,:),'LineStyle',LineStyleList{j})
+    ylabel('v (m/s)');
 set(gca,'xticklabels',[])
 
-    subplot(4,1,3)
+    subplot(5,1,3)
     hold on
-    title('Dynamic Pressure (kPa)','FontSize',9);
+    title('Dynamic Pressure','FontSize',9);
     plot([time21-time21(1)],[q21]/1000,'Color',Colours(j,:),'LineStyle',LineStyleList{j})
+    ylabel('q (kPa)');
 set(gca,'xticklabels',[])
 
-  subplot(4,1,4)
+  subplot(5,1,4)
     hold on
-    title('Angle of Attack (deg)','FontSize',9);
+    title('Angle of Attack','FontSize',9);
     plot([time21-time21(1)],rad2deg(alpha21),'Color',Colours(j,:),'LineStyle',LineStyleList{j})
+    ylabel('AoA (deg)');
 xlabel('Time (s)');
     
+  subplot(5,1,5)
+    hold on
+    title('Heating Rate','FontSize',9);
+    plot([time21-time21(1)],heating_rate21/1000,'Color',Colours(j,:),'LineStyle',LineStyleList{j})
+    ylabel(' (kW/m$^2$)');
+xlabel('Time (s)');
     
 %     xlim([time21(1) timeexo(end)+time21(end)])
 
