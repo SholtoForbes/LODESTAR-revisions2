@@ -46,7 +46,7 @@ gammadot = total_lift./(m.*v).*cos(eta) + (v./r - gn./v).*cos(gamma) + cos(phi).
 vdot = T.*cos(alpha+delta)./(m) - gn.*sin(gamma) -D./m + omega_E.^2.*r.*cos(phi).*(sin(gamma).*cos(phi) - cos(gamma).*sin(zeta).*sin(phi)) + gt.*cos(gamma).*cos(zeta);
 
 
-zetadot = total_lift./(m.*v).*sin(eta)./cos(gamma) -v./r.*tan(phi).*cos(gamma).*cos(zeta) + 2.*omega_E.*cos(phi).*tan(gamma).*sin(zeta) - omega_E.^2.*r./(v.*cos(gamma)).*sin(gamma).*cos(phi).*cos(zeta)-2.*omega_E.*sin(phi) - gt.*sin(zeta); %- XXXX
+zetadot = total_lift./(m.*v).*sin(eta)./cos(gamma) -v./r.*tan(phi).*cos(gamma).*cos(zeta) + 2.*omega_E.*cos(phi).*tan(gamma).*sin(zeta) - omega_E.^2.*r./(v.*cos(gamma)).*sin(gamma).*cos(phi).*cos(zeta)-2.*omega_E.*sin(phi) - gt.*sin(zeta); %- last term should have a v cos gamma on the bottom, will be negligible 
 
 end
 
